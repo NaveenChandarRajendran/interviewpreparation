@@ -1,0 +1,137 @@
+------------------------------------------------------
+                var let const 
+------------------------------------------------------
+First question will ask is scope
+------------------------------------------------------
+                scope 
+------------------------------------------------------
+what is scope?
+A certain declartion is used with in desired region and recognised.
+
+we have certain scope types ex. function scope , block scope,global scope
+function scope:
+function name(){
+
+}
+
+block scope:
+{
+
+}
+
+global scope:
+var a = 10;
+
+So var is a global scope. In enitre code we can access this var declaration.
+let and const are block scope.
+
+let and const are accessable with the block only
+ex
+function name(){
+ let a = 20;
+ if(true){
+    console.log(a) - this throws error as a is not defined.
+ }
+}
+
+
+shadowing
+
+what is shadowing?
+
+ex.
+------------------------------------------------------
+                Variable Shadowing 
+------------------------------------------------------
+Variable Shadowing
+function test(){
+    let a = 'hello';
+
+    if(true){
+        let a = "Hi";
+        console.log(a); // this a inside block will make a shadow copy of a in outer.So it will work individially.
+    }
+    console.log(a);
+}
+
+output:
+Hi
+hello
+------------------------------------------------------
+                Illegal Shadowing 
+------------------------------------------------------
+
+Illegal Shadowing
+function test(){
+    let a = 'hello';
+    var b = "bye";
+
+    if(true){
+        let a = "Hi";
+        let b= "Goodbye"
+        console.log(a); // this works fine.
+        console.log(b); // this will throw error as b is already declared.
+    }
+    console.log(a);
+}
+
+------------------------------------------------------
+                Declaration 
+------------------------------------------------------
+var a = 10
+var a = 10
+this can done 
+let a = 10
+let a = 10
+this throw error as already declared
+same for const
+
+
+------------------------------------------------------
+                Javascript Execution Phase
+------------------------------------------------------
+the Execution will have two types
+1) Creation Phase
+2) Execution Phase 
+
+ex.
+if we have a code as below
+
+let a = 10;
+
+function multiple(x){
+    return x * 10;
+}
+
+let b = multiple(a);
+
+console.log(b);
+
+Intitially all the variables are created with undefined value
+It create a window object and store the entire variables and function as undefined.
+a = undefined
+multiple()
+b= undefined
+
+After storing all, then the Execution Phase will start
+a = 10
+b = 100
+...
+
+------------------------------------------------------
+                Hoisitng
+------------------------------------------------------
+console.log(a)
+var a = 10;
+
+output
+undefined - because creation phase is done so it dont throw error as a is not defined
+
+when using let and const
+console.log(a)
+let a = 10;
+
+output
+This throws an error that cannot access before initization. this declaration is stored in temperory dead zone
+
+ temperory dead zone - it is stored in window object but its not been declared.
