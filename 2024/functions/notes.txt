@@ -1,0 +1,71 @@
+----------------------------------------------------------
+function declaration or function statement are
+----------------------------------------------------------
+
+function main() {
+
+}
+----------------------------------------------------------
+function expression
+----------------------------------------------------------
+
+const square = function (num) {
+    return num * num;
+}
+square();
+function (num) {
+    return num * num;
+}
+the above function is called annaoye function
+----------------------------------------------------------
+What is first class function
+----------------------------------------------------------
+function square(num){
+    return num * num;
+}
+
+function displayNumber(fn){
+    console.log("Square is ",fn(5))
+}
+
+displayNumber(square);
+----------------------------------------------------------
+params vs arguments
+----------------------------------------------------------
+ex
+function add(num1, num2){
+    receving is called params
+    return num1 + num2;
+}
+
+add(1,2); //giving is called arguments
+----------------------------------------------------------
+spread and rest
+----------------------------------------------------------
+function mulitple(num1,num2){ this inside is rest
+    console.log(num1*num2);
+}
+
+var arr =[5,6]
+
+mulitple(...arr); this is spread
+
+if we receving as ...num means
+ex 
+function mulitple(...num){ this inside is rest
+    console.log(num);
+}
+
+output will be [5,6]
+
+Question -
+
+const fn =(a,x,y,...numbers)=>{
+    console.log(x,y,numbers);
+}
+fn(5,6,7,8,9);
+
+output 5,6,[7,8,9]
+
+NOTE - (a,x,y,...numbers) param of spread always should be in last not in between or first
+ex Correct - (a,x,y,...numbers) || Wrong - (a,...numbers,x,y) -> this will throw an error
