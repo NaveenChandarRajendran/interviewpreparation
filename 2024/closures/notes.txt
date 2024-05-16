@@ -1,0 +1,57 @@
+--------------------------------------------------
+Lexical Scope
+--------------------------------------------------
+
+It means where we declare the variables and how we accessing the variable in the function
+
+ex
+function outerFunction() {
+    var outerVariable = 'outside';
+
+    function innerFunction() {
+        console.log(outerVariable); // Can access outerVariable
+    }
+
+    innerFunction();
+}
+
+simple words - the inner function can access the value of the outer function variables
+
+--------------------------------------------------
+Closures
+--------------------------------------------------
+
+Its is fundamental concept , where it retains access to the lexical scope , even when the function is executed on outside.
+
+function outerFunction() {
+    var outerVariable = 'I am outside!';
+    
+    function innerFunction() {
+        console.log(outerVariable); // Can access outerVariable from outerFunction
+    }
+    
+    return innerFunction;
+}
+
+var myInnerFunction = outerFunction();
+myInnerFunction(); // Logs: 'I am outside!'
+
+simple words - closures always have an inner function which will returned so we can call that inner function when ever we want.
+
+
+Practical Uses of Closures:
+Closures are mostly used to create a private variables,protecting the data from directly accessing from outside function.
+
+
+function createCounter(){
+    let count = 0;
+    function add(){
+        count++;
+        return count;
+    }
+    return add;
+}
+
+const counter = createCounter();
+console.log(counter()); // 1
+console.log(counter()); // 2
