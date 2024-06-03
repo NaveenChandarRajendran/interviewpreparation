@@ -1,0 +1,20 @@
+Observerbility
+    This means we can analize what is happening inside our application with following some metrics.
+    This can help developers to understand the how systems are performing, identify and troubleshoot issues, and improve reliability and performance.
+
+Core points are 
+    - Logs
+    - metrics
+    - Traces
+
+Logs
+    Logs are detailed ,timestamp of the activities which are happening in our application.
+    ex - If user login in to our web application, the log will be registed with details of userid , timestamp and wheather the user is logged in successfully or not.
+
+Metrics
+    Metrics are numerical data points which collected over the time period, to measure the system performance.
+    ex - CPU usage,memory consuption and request rates.
+
+Traces
+    Traces represent the end to end journey of the request through the distributed system (microservices).
+    ex - In a microservices architecture , a trace might show user request flow through various services (auth service,user profile service,order processing services.)         
