@@ -17,4 +17,11 @@ Metrics
 
 Traces
     Traces represent the end to end journey of the request through the distributed system (microservices).
-    ex - In a microservices architecture , a trace might show user request flow through various services (auth service,user profile service,order processing services.)         
+    ex - In a microservices architecture , a trace might show user request flow through various services (auth service,user profile service,order processing services.)
+
+
+Tools
+
+For Logs: ELK Stack (Elasticsearch, Logstash, Kibana), Splunk.
+For Metrics: Prometheus, Grafana.
+For Traces: Jaeger, Zipkin.
