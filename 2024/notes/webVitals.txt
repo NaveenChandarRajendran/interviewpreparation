@@ -1,0 +1,24 @@
+WebVitals
+    These are set of metrics which is developed by Google for measuring and understand the user experience of their webpage.
+    The metrics involves such aspects are page loading speed,interactive and visual stability.
+
+Three core web vital metrics are
+1- Largest contentfull Paint - (LCP)
+2 - First Input Delay -(FID)
+3 - Cumulative Layout Shift - (CLS)
+
+
+LCP -
+    It shows the loading performance of the webpage.
+    It spcially looks for the largest content element such as image, big text
+
+FID - 
+    FID measures the interactive of the page.
+    It check the user first interactive to the page (like clicking,tapping the button).
+    Low FID shows the page is responsive to the user input.
+
+CLS -
+    CLS measures the stability of the webpage.
+    It calculates the unexpected layout shift which is happen while loading process.
+    The low CLS means the page elements dont move around unexpected. which can frustating to the user.
+
