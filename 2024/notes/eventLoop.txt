@@ -1,0 +1,42 @@
+Event loop-
+    The javascript is the single thread language,It will do one work at a time.
+
+But it handle multi task effortlessly with the help of Event loop.
+
+Core Things come under Event Loop is
+    - Event Queue
+    - Call Stack
+    - Event Loop
+
+
+Event Queue
+    Imagine a queue where events are lined up.
+    The events can be user interaction like (click,key press etc....), network request (fetch data), timers, or any action that does'nt happen quickly.
+
+Call Stack
+    This is the place (stack) where Javascript keeps track of the code.
+    Each Function call make it entries on the stack and remove when the funtion is completed.
+
+Event loop
+    This Loop is main part as it keep on monitoring the two essentials
+    The Call Stack :
+        If the call stack is empty( i.e no code is there to execute), the event loop will consider its time to pick a new task.
+    The Event Queue :
+        If there is any pending task , the event loop pick the first one in line.
+
+Example
+
+console.log("start");
+
+setTimeout(()=>{
+    console.log("timer");
+},2000)
+
+console.log("End");
+
+//synchronous work
+for(let i=0; i < 1000000; i++){
+
+}
+
+console.log("Loop finished");
