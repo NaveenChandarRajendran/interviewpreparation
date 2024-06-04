@@ -18,10 +18,10 @@ Array.prototype.naveenFilter = function (cb) {
     } return res;
 }
 const customFilterValue = name.naveenFilter((each) => each !== 'two');
-console.log("filter", customFilterValue); const addNo = [1, 2, 3, 4];
-
+console.log("filter", customFilterValue); 
 
 //Reduce
+const addNo = [1, 2, 3, 4];
 const add = addNo.reduce((acc, curr) => {
     return acc + curr;
 }, 0)
