@@ -1,0 +1,103 @@
+//Map 
+let arr = [1, 2, 3];
+arr.map((each, index, arr) => console.log(each, index, arr));
+Array.prototype.naveenMap = function (cb) {
+    let res = []; for (let i = 0; i < this.length; i++) {
+        res.push(cb(this[i], i, this))
+    } return res;
+}
+arr.naveenMap((each) => console.log("nav", each));
+
+//Filter 
+Array.prototype.naveenFilter = function (cb) {
+    let res = [];
+    for (let i = 0; i < this.length; i++) {
+        if (cb(this[i], i)) {
+            res.push(this[i]);
+        }
+    } return res;
+}
+const customFilterValue = name.naveenFilter((each) => each !== 'two');
+console.log("filter", customFilterValue); 
+
+//Reduce
+const addNo = [1, 2, 3, 4];
+const add = addNo.reduce((acc, curr) => {
+    return acc + curr;
+}, 0)
+Array.prototype.naveenReduce = function (cb, initialValue) {
+    for (let i = 0; i < this.length; i++) {
+        initialValue = cb(initialValue, this[i])
+    } return initialValue;
+}
+const customReduce = addNo.naveenReduce((acc, curr) => { return acc + curr; }, 0)
+console.log("customReduce", customReduce);
+
+
+//Find
+const arr =[1,2,3,4];
+
+console.log(arr.find((each)=> each ===6));
+
+let arrObj =[
+    {
+        id:1,
+        name :"naveen"
+    },{
+        id:2,
+        name:"jai"
+    }
+]
+
+Array.prototype.naveenfind = function(cb){
+    let obj =undefined;
+    for(let i=0;i < this.length;i++){
+        if(cb(this[i])){
+            obj = this[i];
+            return obj;
+        }
+    }
+}
+
+// let final = arr.naveenfind((each)=> each ===6)
+let final = arrObj.naveenfind((each)=> each.name ==='naveen')
+console.log("final",final)
+
+
+//Promise.all
+let p1 = Promise.resolve(50);
+let p2 = 200;
+let p3 = new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+        resolve("done");
+    },1000)
+});
+
+// Promise.resolve(p1).then((res)=> console.log("resss",res));
+// p3.then((data)=> console.log(data));
+
+// Promise.all([]).then(function (values) {
+//     console.log(values);
+// });
+
+
+Promise.naveenAlls = function(arr){
+    return new Promise((resolve,reject)=>{
+        let answers =[];
+
+            for (let i=0;i < arr.length;i++){
+                Promise.resolve(arr[i]).then((res)=>{
+                answers.push(res);
+                if(i === arr.length -1){
+                   resolve(answers);
+                }
+                }).catch((err)=>{
+                    console.log("err",err);
+                })
+                
+            }
+        
+    })
+}
+
+Promise.naveenAlls([p1,p2,p3]).then((res)=> console.log("custom promise",res));
