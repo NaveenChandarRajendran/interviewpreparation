@@ -13,3 +13,8 @@ for (let i = 0; i < str.length; i++) {
     else modifieldStr += str[i];
 }
 console.log(modifieldStr);
+
+function recFn(i) {
+    if (i === 10) return
+    recFn(i + 1);
+}

@@ -101,3 +101,57 @@ Promise.naveenAlls = function(arr){
 }
 
 Promise.naveenAlls([p1,p2,p3]).then((res)=> console.log("custom promise",res));
+
+
+//Pop
+let popArray = [1,2,3];
+ 
+Array.prototype.naveenPop = function(){
+ 
+if(this.length === 0){
+  return undefined;
+}
+ 
+let result =this[this.length -1];
+console.log("result",result);
+   this.length -=1;
+return result;
+}
+ 
+const filtered = popArray.naveenPop();
+console.log("filtered",filtered,popArray);
+ 
+ 
+//Push
+ 
+let pushArray =[];
+ 
+Array.prototype.naveenPush = function(...arg){
+for(let i=0; i < arg.length;i++){
+  this[this.length] = arg[i];
+}
+}
+ 
+pushArray.naveenPush(7);
+console.log("pushArray",pushArray);
+ 
+ 
+Shift
+const fruits = ["Banana", "Orange", "Apple", "Mango"];
+ 
+// let fruit = fruits.shift();
+ 
+ 
+ 
+Array.prototype.naveenShift = function(){
+  const firstElement = this[0];
+  for(let i=0; i< this.length;i++){
+     this[i] = this[i+1];
+  }
+this.length -=1;
+return firstElement;
+}
+ 
+let fruit = fruits.naveenShift();
+ 
+console.log(fruits);
