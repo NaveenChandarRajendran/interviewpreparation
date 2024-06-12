@@ -1,0 +1,27 @@
+function deepCopy(obj){
+    if(obj === null || typeof obj !== 'object'){
+     return obj;
+    }
+     if(Array.isArray(obj)){
+      let arrObj=[];
+      obj.forEach((each,index)=>{
+       arrObj[index] = deepCopy(each);
+      })
+      return arrObj;
+     }
+    let objCopy ={};
+    Object.keys(obj).forEach((each)=>{
+     objCopy[each] = deepCopy(obj[each]);
+    })
+    return objCopy;
+   }
+   let inputObject = {
+    a:1,
+    b:{
+     c:2
+    }
+   }
+   const outObject = deepCopy(inputObject);
+   outObject.b.c = 10;
+   console.log(inputObject);
+   console.log(outObject);
