@@ -1,0 +1,46 @@
+// basic
+function add(x){
+    return function(y){
+        return function(z){
+            return x + y +z;
+        }
+    }    
+}
+
+console.log(add(1)(2)(3));
+
+//Single Params
+function infiniteSum(a){
+    return function(b){
+        if(b === undefined){
+            return a;
+        }
+
+        return infiniteSum(a+b);
+    }
+}
+
+let sum = infiniteSum(1)(2)(3)(4)();
+console.log(sum);
+let sum2 = infiniteSum(5)(10)(15)();
+console.log(sum2);
+
+
+//MultiParams
+
+function multiSum(...arg){
+    let sum =0;
+    for(let i=0;i < arg.length;i++){
+        sum += arg[i];
+    }
+
+    function inner(...innerArg){
+        if(innerArg.length ===0){
+            return sum;
+        }
+        return multiSum(sum,...innerArg);
+    }
+    return inner;
+}
+
+console.log(multiSum(1,2)(3)(4,5,6)());

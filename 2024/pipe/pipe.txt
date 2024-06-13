@@ -1,0 +1,11 @@
+const pipe = (...fns) => x =>{
+    return fns.reduce((accVal,currFunc)=> currFunc(accVal),x)
+}
+
+const add = x => x+1;
+const multiply = x => x* 2;
+const subract = x => x-3;
+
+const pipeLine = pipe(add,multiply,subract);
+
+console.log(pipeLine(5));
