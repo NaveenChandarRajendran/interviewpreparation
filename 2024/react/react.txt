@@ -118,3 +118,31 @@ Fragment
 --------
  
 React.Fragment is used to wrap the component entirely jsx code. To avoid div the Fragment is used.
+
+Bind
+------
+
+bind is used to refer the this context.in react component when you try to pass an method as an event handler by binding we can providing the correct component this context.
+
+
+Synthetic Events in React
+-------------------------
+the synthetic events are cross browser wrapper around the brower native events.
+
+forward ref
+---------------
+farword ref is used when to pass the parent ref to the child element as ref.This is usefull for access the direct DOM os its child component.
+
+Fiber
+----------
+React fiber is the new implementation in React v16
+THe goal of react fiber is to sutability of the areas like animations,layout,gestures,ability to pause.
+
+Phases of component life cycle?
+---------------------------------
+mounting
+constructor
+updating
+rendor
+
+
