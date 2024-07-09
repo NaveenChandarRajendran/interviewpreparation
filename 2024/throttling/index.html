@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <script>
+
+        const handleResizeThrottle = (func,delay) => {
+            let isTimeDone = true;
+            return function(...args){
+                if(isTimeDone){
+                    func.apply(this,args);
+                    isTimeDone = false;
+                    setTimeout(()=>{
+                    isTimeDone = true;
+                },delay)
+                }
+              
+            }
+        }
+
+        const expensive = () => {
+            console.log("Something expensive logic is undergoing");
+        }
+
+        window.addEventListener("resize", handleResizeThrottle(expensive, 1000))
+    </script>
+
+</body>
+
+</html>
