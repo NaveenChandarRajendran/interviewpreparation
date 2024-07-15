@@ -1,0 +1,13 @@
+Encapsulation 
+It is used when we want to protect some object properties or method. It is a private fields.
+
+
+Inheritance
+It is used to inherit a class and object from one class to other.
+We can extract the properties and methods of one class to other.
+
+Polymorphism
+It allows objects to different classes to be treated as comman super class.
+
+Abstraction
+It is used to hide complex implementation details and will show only the necessary details.
