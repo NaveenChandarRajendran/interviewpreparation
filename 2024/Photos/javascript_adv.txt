@@ -1,0 +1,62 @@
+Execution Context
+-----------------------------------
+  When a javascript engine scans a script that time environment is created which is called Execution Context.
+
+  During parsing the script js will allowcate a memory to variable and function.
+
+  There is two types of execution context.
+  1) Global context. (variables will be stored)
+  2) Function context. (Only functions will be stored)
+
+  There is two phases.
+  1) Creation phases. (Intially every variable and function will be created.variablrd will be stored as undefined and function with its own statement)
+  2) Execution phases.
+
+Event Loop
+------------------------------------
+  Its is the core fundamental to do enable asynchronous operations.
+How do Event loops work?
+Call Stack:
+JavaScript uses a call stack to keep track of the currently executing function (where the program is in its execution).
+Callback Queue:
+Asynchronous operations, such as I/O operations or timers, are handled by the browser or Node.js runtime. When these operations are complete, corresponding functions (callbacks) are placed in the callback queue.
+Event Loop:
+The event loop continuously checks the call stack and the callback queue. If the call stack is empty, it takes the first function from the callback queue and pushes it onto the call stack for execution.
+Execution:
+The function on top of the call stack is executed. If this function contains asynchronous code, it might initiate further asynchronous operations.
+Callback Execution:
+When an asynchronous operation is complete, its callback is placed in the callback queue.
+Repeat:
+The event loop continues this process, ensuring that the call stack is always empty before taking the next function from the callback queue.
+
+What is undefined + 1
+--------------------------
+  Answer is Nan. Because js tries to convert the undefined to number. So it produce nan.
+
+Temporal dead zone - TDZ
+----------------------------
+  it is the concept in javascript where related to hoisting in variables.
+  If we are using let or const means we cant reassign the same let. It comes under TDZ. So ReferenceError will be thrown. But assigning with var is possible.
+
+Event Delegation
+------------------------------
+  Event Delegation is a technique is used as single event which is used on parent element instead of using it in child elements.
+
+  ex:
+
+  <ul id="mylist">
+    <li>Item 1</li>
+    <li>Item 2</li>
+    <li>Item 3</li>
+  </ul>
+
+  <script>
+    document.getElementById.addEventListerner("click",functiob(event){
+        if(event.target && event.target.nodeName ==='LI'){
+          console.log(event.target.textContent)
+        }
+    })
+  </script>
+  
+  
+  
