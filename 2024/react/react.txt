@@ -1,148 +1,131 @@
 One Way Data binding
 --------------------
- 
+
 React promotes a unidirectional data flow, which makes it easier to understand.
- 
+
 Data flow is a single directions i.e Parent to Child component.
- 
+
 ex
 import React, { useState } from 'react';
- 
+
 // Parent Component
 function ParentComponent() {
   const [data, setData] = useState('Hello, World!');
- 
+
   const updateData = () => {
     setData('Hello, React!');
   };
- 
+
   return (
-<div>
-<ChildComponent message={data} />
-<button onClick={updateData}>Update Data</button>
-</div>
+    <div>
+      <ChildComponent message={data} />
+      <button onClick={updateData}>Update Data</button>
+    </div>
   );
 }
- 
+
 // Child Component
 function ChildComponent(props) {
   return <h1>{props.message}</h1>;
 }
- 
+
 export default ParentComponent;
- 
- 
+
+
 Key in React
 ------------
- 
+
 The key refers to the special string attribute. Which makes react to know which item in the list are updated,deleted.
- 
- 
+
+
 Events in React
- 
+
 Need to create a function that function is called event handler function.
 ex. onClick = {()=> handleClick()}
- 
+
 OnClick is the event.
 handleClick is the custom function which will handle what to do.
- 
- 
+
+
+
 How do browsers read JSX?
 -------------------------
- 
+
 In general, browsers are not capable of reading JSX and only can read pure JavaScript. The web browsers read JSX with the help of a transpiler. Transpilers are used to convert JSX into JavaScript. The transpiler used is called Babel.
- 
+
 High Order Components
- 
+
 It is an advanced method of reusing component logic.It simple get the original component and return the enhanced components.
- 
+
 ex.
- 
+
 src/component/HighOrderComponent.js
- 
+
 import React, { useEffect, useState } from 'react'
- 
+
 const HighOrderComponent = (WrappedComponent) => {
     return function WithLoading(props) {
         const [isLoading, setIsLoading] = useState(true);
- 
+
         useEffect(() => {
             setTimeout(() => {
                 setIsLoading(false);
             }, 1000)
         }, [])
- 
+
         if (isLoading) {
             return (
-<div>
+                <div>
                     Its Loading
-</div>
+                </div>
             )
         }
- 
+
         return <WrappedComponent {...props} />
     }
 }
- 
+
 export default HighOrderComponent;
- 
+
 src/component/UsingHighOrder.js
- 
+
 import React from 'react';
 import HighOrderComponent from './HighOrderComponent';
- 
+
 function UsingHighOrder() {
     return (
-<div>UsingHighOrder</div>
+        <div>UsingHighOrder</div>
     )
 }
- 
+
 const LeverageHOC = HighOrderComponent(UsingHighOrder);
- 
+
 export default LeverageHOC;
- 
+
 src/App.js
 import './App.css';
 import LeverageHOC from './component/UsingHighOrder';
- 
+
 function App() {
   return (
-<LeverageHOC />
+    <LeverageHOC />
   );
 }
- 
+
 export default App;
- 
- 
+
+
 Fragment
 --------
- 
+
 React.Fragment is used to wrap the component entirely jsx code. To avoid div the Fragment is used.
 
-Bind
-------
+useCallback
+--------------
 
-bind is used to refer the this context.in react component when you try to pass an method as an event handler by binding we can providing the correct component this context.
+useCallback return memorized function to reduce the unnecessary callbacks. 
 
 
-Synthetic Events in React
--------------------------
-the synthetic events are cross browser wrapper around the brower native events.
 
-forward ref
----------------
-farword ref is used when to pass the parent ref to the child element as ref.This is usefull for access the direct DOM os its child component.
-
-Fiber
-----------
-React fiber is the new implementation in React v16
-THe goal of react fiber is to sutability of the areas like animations,layout,gestures,ability to pause.
-
-Phases of component life cycle?
----------------------------------
-mounting
-constructor
-updating
-rendor
 
 
