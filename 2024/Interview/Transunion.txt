@@ -1,0 +1,35 @@
+Company name - Transunion
+
+JS
+Questions :
+1-
+const obj = { a: { b: 1} };
+ 
+const obj1 = {...obj}
+obj1.a.b = 3;
+
+console.log(obj1)
+
+what will be console value of obj1.
+
+2-
+
+const obj2 = { a: { b: 1} };
+
+const obj3 = {...obj2}
+obj3.a= 3;
+
+console.log(obj3);
+
+what will be console value of obj3.
+
+React
+Question - Integrate this API https://randomuser.me/api/?results=10 and show in a table,
+add dropdown where dropdown has to be value of 10,20,40,100
+According to the dropdown value the table content should display.
+
+What is Batching?
+
+What is local storage and diff between local storage and sessions
+
+What is cookies
