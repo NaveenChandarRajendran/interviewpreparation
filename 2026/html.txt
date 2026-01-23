@@ -1,0 +1,10 @@
+#### Web Components ####
+It is native browser level technologies where we can create the custom html and reuse it without need of React and Angular
+
+#### Critical Render Path (CRP) ####
+THe CRP is the set of sequence which  browser to follow to do convert the html,css and js into pixels on the screens.Including DOM construction,CSSOM construction,render tree,layout,paint and composition.
+
+#### Shadow DOM ####
+Shadow DOM means encapsulated DOM + CSS that is isolated form the main DOM.
+Why this occurs is that Glocal css can break the elements so to avoid we can create an shadow DOM
+How to create -> We can create the class by extending the HTMLElement, wrote the code what you want to isolate and pass the class to custom elements.define(classname)

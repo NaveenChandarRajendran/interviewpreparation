@@ -1,0 +1,160 @@
+The objects are referance
+
+---------------------------------------------------------------
+Shallow copy
+---------------------------------------------------------------
+const copy = {...user}; //But this will not copy the nested objects.Its still shared
+
+---------------------------------------------------------------
+Deep copy
+---------------------------------------------------------------
+const deep = JSON.parse(JSON.stringify(user));
+
+---------------------------------------------------------------
+Object Freeze and Sealing
+---------------------------------------------------------------
+
+Object.freeze(obj); //this object does not have add/update/delete
+Object.freeze(obj); //update allowed
+
+Difference between == and === for objects?
+if we try {} == {} it will be false.
+The objects are compared by the referance not by value
+What is this inside an object?
+this is refers to the object which is invoked my method
+---------------------------------------------------------------
+Execution Context
+---------------------------------------------------------------
+
+In Environment in which how the javascript code is executed
+
+It has two types
+1. Global Execution Context
+    - It defers the global variables,functions this(window) etc
+2. Function Execution Context
+    - It creates everytime within the function call
+
+It has two types in Phases
+1.Memory creation phase (Hoisting)
+    - JS scans code and allocate the Memory
+    variable -> undefiend
+    functions -> full function definition
+    let/cont -> store with uninitialzied
+2.Execution Phases
+    Executing the code
+
+Common Tricky Interview Question
+console.log(x);
+
+function foo() {
+  console.log(x);
+  var x = 20;
+}
+
+var x = 10;
+foo();
+
+Output
+
+undefined
+undefined
+
+Reason
+Global x hoisted → undefined
+
+Function x hoisted → undefined (shadowing)
+
+---------------------------------------------------------------
+Event Looping
+---------------------------------------------------------------
+It is the Mechanism which allows Javascript (single thread) to handle async operations
+
+How it works?
+
+It keep on check the call stack
+if call stack is empty then it calls micotask after that Macrotask then repeat.
+
+call stack(empty means) -> Micro task -> Macro task
+
+Micro task
+    Promise.then
+    catch
+    finally
+
+Macro task
+    setTimeout
+    setInterval
+    DOM events
+
+micro task have HIGHER priority than Macrotask
+
+Tricky Interview Questions (with answers 🔥)
+Q1️) Predict the output
+setTimeout(() => console.log("A"), 0);
+
+Promise.resolve().then(() => console.log("B"));
+
+console.log("C");
+
+Output
+C
+B
+A
+
+Q2) What happens if microtasks keep coming?
+    Macrotask waits
+    UI can freeze
+
+Q3) Is setTimeout guaranteed to run in given time?
+    Ans - No
+
+---------------------------------------------------------------
+Hoisting
+---------------------------------------------------------------
+Hoisting is the process by which JavaScript allocates memory for variables and functions before code execution, allowing access to declarations before they appear in the code.
+
+Note
+    - Only declaration are hoisted
+    - Initialization are not hoisted
+
+- Hoisting with var
+
+console.log(a);
+var a = 10;
+output -> undefined
+
+- Hoisting with let and const
+
+console.log(b);
+let b = 20;
+
+Output -> ReferenceError: Cannot access 'b' before initialization
+
+Why?
+
+let and const ARE hoisted
+
+But kept in Temporal Dead Zone (TDZ)
+
+Cannot be accessed before initialization
+
+- Hoisting with Functions
+hello();
+
+function hello() {
+  console.log("Hello");
+}
+✔ Works
+Why?
+Function declarations are hoisted with full definition
+
+- Difference between hoisting in functions and blocks?
+
+var → function-scoped
+
+let/const → block-scoped
+
+
+
+
+
