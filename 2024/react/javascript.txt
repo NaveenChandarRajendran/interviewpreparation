@@ -1,0 +1,146 @@
+Hoisting
+-----------
+
+The variables and functions are moved to top of the containing scope before executing the code.
+This means you can use the variables before the execution.
+
+
+The variables declared with var are hoisted with undefined where the variables declared with let and const are hoisted but not initialzed.
+
+The functions are hoisted with their own definitions.
+
+Event looping
+--------------
+
+THe event looping is the mechanism where it will keep on check the call stack and callback queue to perform non-blocking process.
+The call stack will store the functions when there is call back function like event,timer,network request which all their call backs are stored in callback queue.
+
+The event loop main work is to check the call stack,when the call stack is free the event loop will pull the 1st function in the callback queue.
+
+var,let and const
+-------------------
+
+Var is the function scoped can be redeclared and updated.
+
+let is block scoped can be updated but cannot be redeclared.
+const can neither be updated nor redeclared.
+
+
+Event Delegation
+------------------
+Event delegation is technique which is used to events handlers efficiently.
+Instead of adding event handlers in every element, we can add single event in parent and use that same event in childrens.
+
+ex.
+without delegation.
+-------------------
+<ul id="item-list">
+    <li>Item 1</li>
+    <li>Item 2</li>
+    <li>Item 3</li>
+</ul>
+
+<script>
+    const items = document.querySelectorAll('#item-list li');
+
+    items.forEach(item => {
+        item.addEventListener('click', function() {
+            console.log(this.textContent);
+        });
+    });
+</script>
+
+With delegation
+----------------
+
+<ul id="item-list">
+    <li>Item 1</li>
+    <li>Item 2</li>
+    <li>Item 3</li>
+</ul>
+
+<script>
+    const itemList = document.getElementById('item-list');
+
+    itemList.addEventListener('click', function(event) {
+        if (event.target && event.target.nodeName === 'LI') {
+            console.log(event.target.textContent);
+        }
+    });
+</script>
+------------------------------------------------------------------------------------------------------------
+Can you explain the concept of functional programming and how it's applied in JavaScript?
+------------------------------------------------------------------------------------------------------------
+
+Functional programming is a type of software programming where programs are constructed with application of functions.
+It avoid changing state and mutable data.
+We can apply functional programing concepts using functions as high order function and pure functions.
+
+Pure functions
+It does not alter the inputs only it accept the inputs and process it. It wont create any side efforts. (e.g., modifying global variables, performing I/O operations).
+
+ex
+// Pure function
+function add(a, b) {
+    return a + b;
+}
+
+// Impure function (has side effects)
+let total = 0;
+function addToTotal(a) {
+    total += a;
+}
+
+Immutability
+In functional programing the data wont be changed.
+ex.
+let arr = [1, 2, 3];
+let newArr = [...arr, 4]; // newArr is [1, 2, 3, 4], arr remains [1, 2, 3]
+
+
+High Order function.
+High order function accepts the function as argument or return function as their results.
+
+ex.
+function doMath(a,b,operation){
+    return operation(a,b);
+}
+
+const sum = doMath(2,3,(x,y)=> x+y);
+const product = doMath(2,3,(x,y)=> x*y);
+
+----------------------------------------------------------------------------------------------
+Describe the difference between an arrow function and a regular function in JavaScript
+------------------------------------------------------------------------------------------------
+
+There is diff occur in syntax way.in arrow we dont need to use return word in single line.
+Majorly 'this' keyword will work differently.
+
+in regular function, this will work according to the context.
+
+ex.
+let obj = {
+    value:41,
+    regular:function(){
+        console.log(this.value);
+    }
+}
+
+obj.regular() //output 41
+
+let getRegularFunction = obj.regular;
+getRegularFunction() // Output undefined. because this refers to global like window.this.
+
+Arrow function 
+
+const obj = {
+    value: 42,
+    regularFunction: function() {
+        const arrowFunction = () => {
+            console.log(this.value); // `this` is inherited from `regularFunction`, so it refers to `obj`
+        };
+        arrowFunction();
+    }
+};
+
+obj.regularFunction(); // Output: 42

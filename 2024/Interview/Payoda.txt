@@ -1,0 +1,58 @@
+Payoda Interview
+Question
+
+1) What is mean by DOM and BOM
+2) What is Closure?
+3) What is Hoisitng?
+4) Event Looping
+5) What is aync and defer? 
+6) What are the hooks you know in React?
+
+
+Problems
+1)
+// function add(){
+//     console.log(x);
+//     var x = 5;
+// }
+
+// add();
+// var x = 15;
+// console.log(x)
+
+
+2) Flat this without using any array methods.
+// let array =[1,2,[3,4,[5,6,[7,8]]]];
+
+// let finalArray=[];
+
+// function test(args){
+//     for(let i=0;i < args.length;i++){
+//         if(Array.isArray(args[i])){
+//             test(args[i])
+//         }else{
+//             finalArray.push(args[i])
+//         }
+//     }
+// }
+
+// test(array);
+
+// console.log("finalArray",finalArray);
+
+3) Remove the duplicate elements without using any array methods.
+let array = [0,1,1,2,2,3];
+
+let finalValue = [];
+function mock(args){
+    for(let i=0;i<args.length;i++){
+        let nextValue = i +1;
+        if(args[i] !== args[nextValue] ){
+            finalValue.push(args[i])
+        }
+    }
+    
+}
+console.log(finalValue)
+
+
