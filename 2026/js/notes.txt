@@ -154,7 +154,1056 @@ var → function-scoped
 
 let/const → block-scoped
 
+---------------------------------------------------------------
+undefiend + 1
+---------------------------------------------------------------
+The javascript tries to convert the undefiend to number because of the + operator it returns NAN that so the output will be NAN
+
+Output:
+NAN
+
+---------------------------------------------------------------
+Temporary Dead Zone TDZ
+---------------------------------------------------------------
+
+It is present in the memory execution phase where the let and const are allocated in memory but not accessable. If initial value is assigned means then we can access.
+It will restrict the accessing the variable before accising an initial value.
+
+---------------------------------------------------------------
+Event Delegation
+---------------------------------------------------------------
+
+It is process of adding the vent lisners to the parent level instead of giving to its all child elements
+Example :
+const ul = document.querySelector("ul");
+
+ul.addEventListener("click", (event) => {
+  if (event.target.tagName === "LI") {
+    console.log(event.target.textContent);
+  }
+});
+
+---------------------------------------------------------------
+call, apply and bind
+---------------------------------------------------------------
+
+these are used to control the 'this' value when calling a function
+
+examples
+
+call
+const user :{
+    name :"naveen"
+}
+
+function greet(){
+    console.log(this.name)
+}
+
+greet() -> undefiend
+
+When we use call
+greet.call(user); -> naveen
+
+function greet(city, country) {
+  console.log(this.name, city, country);
+}
+
+greet.call(user, "Chennai", "India");
+✔ Calls the function immediately
+✔ Arguments passed one by one
+
+apply
+syntax
+greet.apply(this.Args,[arg1,arg2])
+
+greet.apply(user, ["Chennai", "India"]);
+✔ Calls immediately
+✔ Arguments passed as array
+
+bind (important)
+const newFn = functioname.bind(this.Args,arg1,arg2)
+
+const boundGreet = greet.bind(user, "Chennai", "India");
+
+boundGreet();
+✔ Does NOT execute immediately
+✔ Returns a new function
+✔ Very useful in callbacks & React/Angular
+
+Real-world example (very common)
+without bind
+const user :{
+    name :"Naveen",
+    greet(){
+        setTimeout(function(){
+            console.log(this.name);
+        },1000)
+    }
+}
+
+user.greet() ->undefined
+
+with bind
+ setTimeout(function(){
+            console.log(this.name);
+}.bind(this),1000)
+
+Important note 
+for array functions call,apply,bind does not work on then it always outputs undefiend
+
+---------------------------------------------------------------
+prototype
+---------------------------------------------------------------
+Prototype is an object where other object inherit properties and methods through the prototype chain
+
+❌ Bad (duplicate methods):
+const user1 = {
+  greet() { console.log("Hi naveen"); }
+};
+
+const user2 = {
+  greet() { console.log("Hi raj"); }
+};
 
 
+✅ Good (shared via prototype):
+function User(){
+    this.name = name;
+}
+
+User.protoype.great = function(){
+    console.log("Hi"+ this.name);
+}
+
+const user1 = new User("Naveen");
+const user2 = new User("Raj");
+Both objects share one greet method.
+
+Prototype chain (VERY IMPORTANT 🔥)
+
+user1 -> User.prototype -> Object.prototype -> null
+
+Example
+
+function Person(){
+    this.name = name;
+}
+
+Person.prototype.sayHi = fucntion(){
+    console.log("Hi"+ this.name);
+}
+
+const p1 = new Person("Naveen");
+
+p1.sayHi();
+
+Flow:
+
+p1 -> sayHi()
+-> Checks Person.prototype
+-> found -> excevuted
+
+Prototype vs Class (important clarification)
+class User {
+  greet() {
+    console.log("Hello");
+  }
+}
+
+Behind the scenes:
+User.prototype.greet
+
+Object.create() & prototype
+
+const parent = {
+  role: "admin"
+};
+
+const child = Object.create(parent);
+
+child.role; // "admin"
+Behind the scenes:
+child → parent → Object.prototype
+
+---------------------------------------------------------------
+Closure
+---------------------------------------------------------------
+
+Closure is when function remembers its variables from its outter scope even the outer function fineshed the exceution.
+
+basic example
+
+function outter(){
+    let count = 0;
+
+    funtion inner(){
+        count++
+        console.log("count");
+    }
+    return inner;
+}
+
+const inFn = outter();
+inFn()
+output -> 1
+
+In Real life we can use it for Data privacy
+
+function bankAccount() {
+  let balance = 1000;
+
+  return {
+    deposit(amount) {
+      balance += amount;
+      console.log(balance);
+    },
+    getBalance() {
+      return balance;
+    }
+  };
+}
+
+const account = bankAccount();
+
+account.deposit(500); // 1500
+console.log(account.balance); // ❌ undefined
+
+setTimeout (Classic Interview Question)
+function greet() {
+  let name = "Naveen";
+
+  setTimeout(function () {
+    console.log(name);
+  }, 1000);
+}
+
+greet();
+
+Closure in Loops (FAMOUS INTERVIEW TRAP ⚠️)
+for (var i = 1; i <= 3; i++) {
+  setTimeout(() => {
+    console.log(i);
+  }, 1000);
+}
+
+output
+4
+4
+4
+
+Why?
+var is function-scoped
+One shared i
+Closure captures reference, not value
+
+Fix with let ✅
+for (let i = 1; i <= 3; i++) {
+  setTimeout(() => {
+    console.log(i);
+  }, 1000);
+}
+output
+1
+2
+3
+Because:
+
+let creates new binding per iteration
+
+Questions 
+1) Do closures cause memory leaks?
+Answer:
+Yes, if not handled properly.
+Variables stay in memory as long as closure exists.
+
+---------------------------------------------------------------
+Currying
+---------------------------------------------------------------
+Currying is a functional programming technique where a function takes arguments one at a time and returns a new function for the next argument.
+
+Instead of this ❌
+add(2, 3)
+
+We do this
+
+add(2)(3)
+
+Basic Example (Must-know)
+function add(a){
+    return function (b){
+        return a + b;
+    }
+}
+
+add(1)(2) // 3
+
+Same Example with Arrow Function
+
+const add = a => b => a + b;
+add(5)(10); // 15
+
+Use Case 1️⃣: Reusability (Very Important)
+
+const multiply = a => b => a * b;
+
+const double = multiply(2);
+const triple = multiply(3);
+
+double(5) // 2 * 5 => 10
+triple(5) // 3 * 5 => 15
+
+✔️ Create specialized functions
+✔️ Reuse logic
+✔️ Cleaner than passing same argument again and again
+
+Use Case 2️⃣: Validation Functions
+const minLength = length => value => value.length >= length;
+
+const firstName = minLength(3);
+const lastName = minLength(5);
+
+firstName("na") //false
+lastName("chandar") //true
+
+---------------------------------------------------------------
+Promise.race vs Promise.any
+---------------------------------------------------------------
+
+race -> Promise.race([p1, p2, p3])
+it looks first promise which is settled that can be resolve or reject. first emits is considered
+
+any -> Promise.any([p1, p2, p3])
+it only looks for the success resolve not an reject response
+
+example
+race 
+const p1 = new Promise((resolve)=> setTimeout(() => resolve("P1"),2000));
+const p2 = new Promise((_,reject) => setTimeout(()=> reject("Error in P2"),1000));
+
+Promise.race([p1, p2])
+  .then(result => console.log(result))
+  .catch(err => console.log(err));
+
+output
+Error in P2
+
+Why?
+
+p2 finished firstIt rejected
+Race doesn’t care about success/failure
+
+any
+const p1 = new Promise((_, reject) => setTimeout(() => reject("Fail 1"), 1000));
+const p2 = new Promise(resolve => setTimeout(() => resolve("Success"), 2000));
+
+Promise.any([p1, p2])
+  .then(result => console.log(result))
+  .catch(err => console.log(err));
+
+Why?
+
+Ignores rejections
+Resolves when first success happens
+
+What if ALL promises fail in Promise.any?
+Promise.any([
+  Promise.reject("A"),
+  Promise.reject("B")
+])
+.catch(err => console.log(err));
+
+Output
+AggregateError: All promises were rejected
+
+✔️ Special error object
+✔️ Contains all errors
+
+---------------------------------------------------------------
+Object.create vs Object.assign
+---------------------------------------------------------------
+Object.create
+  ->It create object by prototype based
+  -> It is accessed via prototype chain
+  -> Example 
+const person = {
+  greet() {
+    console.log("Hello");
+  }
+};
+
+const user = Object.create(person);
+
+user.name = "Naveen";
+
+user.greet(); // Hello
+
+What is happening?
+-> user Object is created with person prototype
+-> the user.greet method is accessed with parent
+-> Prototype chain -> user-person
+-> No property copying
+
+Object.assign
+  -> The new object is created with shallow copy.
+  -> All the properties are copied
+  -> Prototype is not changed 
+  -> Example
+const obj1 = { a: 1 };
+const obj2 = { b: 2 };
+
+const result = Object.assign({}, obj1, obj2);
+
+console.log(result); // { a: 1, b: 2 }
+
+But there will be shallow copy TRAP
+const obj1 = { a: { x: 1 } };
+const obj2 = Object.assign({}, obj1);
+
+obj2.a.x = 99;
+
+console.log(obj1.a.x); // 99 😬
+
+---------------------------------------------------------------
+Object.entries
+---------------------------------------------------------------
+It return the key and value in array format.
+const user = {
+  name: "Naveen",
+  age: 28,
+  role: "Frontend Developer"
+};
+
+console.log(Object.entries(user));
+
+Output
+[
+  ["name", "Naveen"],
+  ["age", 28],
+  ["role", "Frontend Developer"]
+]
+
+Interview Question
+const obj = Object.create({ a: 1 });
+obj.b = 2;
+
+console.log(Object.entries(obj));
+
+Output
+[["b", 2]]
+
+It ignores prototype properties
+
+---------------------------------------------------------------
+Object.fromEntries
+---------------------------------------------------------------
+It is opposite of Object.entried
+
+const arr = [
+  ["name", "Naveen"],
+  ["age", 28],
+  ["role", "Frontend Developer"]
+];
+
+const obj = Object.fromEntries(arr);
+
+console.log(obj);
+
+Output
+{
+  name: "Naveen",
+  age: 28,
+  role: "Frontend Developer"
+}
+
+---------------------------------------------------------------
+event.target vs event.currentTarget
+---------------------------------------------------------------
+target -> where the click is happened
+currentTarget -> who is handling the click
+
+example 
+<div id="parent">
+  <button id="child">Click</button>
+</div>
+
+parent.addEventListener("click", (event) => {
+  console.log(event.target);        // button
+  console.log(event.currentTarget); // div
+});
+
+---------------------------------------------------------------
+async vs defer
+---------------------------------------------------------------
+example
+1 -> <script src="app.js"></script>
+2 -> <script async src="app.js"></script>
+3 -> <script defer src="app.js"></script>
+
+default case is 1 
+-> HTML parsing is stopped
+-> id app.js is large means , THe UI will looks like freeze
+
+async case
+-> Script loads asynchronously and executes as soon as it is ready, without guaranteeing order.
+
+defer case
+-> Script loads asynchronously but executes after HTML parsing, preserving order.
+
+Real-World Use Cases
+Use async when:
+-> Script does not depend on DOM
+-> Script does not depend on other scripts
+
+✅ Examples:
+Google Analytics
+Ads
+Tracking scripts
+
+Use defer when:
+-> Script needs DOM access
+-> Script depends on other scripts
+You want predictable execution
+
+✅ Examples:
+Main app JS
+
+What happens if both async and defer are present?
+Browser treats it as async
+
+---------------------------------------------------------------
+SOLID Principle
+---------------------------------------------------------------
+it is standard which will be followsed by developere to 
+Write clean code
+scalability
+maintainbility
+
+S -> Single Responsible
+O -> open / closed
+L -> Liskov Substitution
+I -> Interface Segregation
+D -> Dependency Inversion
+
+1️⃣ S – Single Responsibility Principle (SRP)
+class / module should have only one reason to change.
+❌ Bad Example
+class UserService {
+  createUser() {}
+  sendEmail() {}
+  saveToDatabase() {}
+}
+Too many responsibilities
+
+Good Example
+class UserService {
+  createUser() {}
+}
+
+class EmailService {
+  sendEmail() {}
+}
+
+class UserRepository {
+  save() {}
+}
+✔️ Each class has one job
+
+2️⃣ O – Open / Closed Principle (OCP)
+👉 Code should be open for extension but closed for modification.
+
+❌ Bad Example
+function getDiscount(type: string) {
+  if (type === "gold") return 20;
+  if (type === "silver") return 10;
+}
+Every new type → modify function ❌
+✅ Good Example
+interface Discount {
+  getDiscount(): number;
+}
+
+class GoldDiscount implements Discount {
+  getDiscount() {
+    return 20;
+  }
+}
+
+class SilverDiscount implements Discount {
+  getDiscount() {
+    return 10;
+  }
+}
+Add new class, no modification 👌
+
+3️⃣ L – Liskov Substitution Principle (LSP)
+👉 Child class should replace parent class without breaking behavior.
+❌ Bad Example
+class Bird {
+  fly() {}
+}
+
+class Penguin extends Bird {
+  fly() {
+    throw new Error("Can't fly");
+  }
+}
+Breaks expectations ❌
+
+Good Example
+✅ Good Example
+class Bird {}
+
+class FlyingBird extends Bird {
+  fly() {}
+}
+
+class Penguin extends Bird {
+  swim() {}
+}
+✔️ No broken behavior
+
+4️⃣ I – Interface Segregation Principle (ISP)
+👉 Don’t force a class to implement methods it doesn’t need.
+❌ Bad Example
+interface Worker {
+  work();
+  eat();
+}
+
+class Robot implements Worker {
+  work() {}
+  eat() {} // 😬
+}
+
+✅ Good Example
+interface Workable {
+  work();
+}
+
+interface Eatable {
+  eat();
+}
+
+class Robot implements Workable {
+  work() {}
+}
+✔️ Small, focused interfaces
+
+5️⃣ D – Dependency Inversion Principle (DIP)
+👉 High-level modules should not depend on low-level modules, both should depend on abstractions.
+❌ Bad Example
+class MySQLDatabase {
+  save() {}
+}
+
+class UserService {
+  db = new MySQLDatabase();
+}
+Tightly coupled ❌
+
+✅ Good Example
+interface Database {
+  save();
+}
+
+class MySQLDatabase implements Database {
+  save() {}
+}
+
+class UserService {
+  constructor(private db: Database) {}
+}
+✔️ Loose coupling
+✔️ Easy to swap DB
+
+Memory Trick 🧠
+
+S – One job
+O – Add, don’t change
+L – Don’t break parent
+I – Don’t force methods
+D – Invert dependency
+
+---------------------------------------------------------------
+DRY Principles
+---------------------------------------------------------------
+
+DRY = Don’t Repeat Yourself
+👉 Every piece of knowledge or logic should exist in only one place in your codebase.
+
+❌ Bad Example (DRY Violation)
+function calculatePrice(price) {
+  return price + price * 0.18;
+}
+
+function calculateDiscountedPrice(price) {
+  return price + price * 0.18 - 100;
+}
+Tax logic repeated ❌
+
+✅ Good Example (DRY Followed)
+function addTax(price) {
+  return price + price * 0.18;
+}
+
+function calculateDiscountedPrice(price) {
+  return addTax(price) - 100;
+}
+✔️ Tax logic in one place
+
+Is DRY always good?
+ ✔️ Mostly yes
+❌ But over-abstraction can reduce readability
+
+---------------------------------------------------------------
+Web Workers
+---------------------------------------------------------------
+Web Workers allow JavaScript to run in a background thread, separate from the main UI thread.
+
+Why Do We Need Web Workers?
+Without workers ❌:
+-> Heavy loops
+-> Big calculations
+->Data processing
+
+👉 UI becomes unresponsive
+
+With workers ✅:
+-> UI stays smooth
+-> Heavy tasks run in background
+
+Main Thread vs Web Worker
+Main Thread	Web Worker
+Handles UI->	No UI access
+DOM access->	❌ No DOM
+Blocking possible->	Non-blocking
+Event handling->	Background tasks
+
+we have two methods
+✔️ postMessage → send data
+✔️ onmessage → receive result
+
+Common Interview Traps ⚠️
+❓ Can Web Worker access DOM?
+❌ No
+
+❓ Can Web Worker communicate with main thread?
+✔️ Yes, via postMessage
+
+❓ Are Web Workers asynchronous?
+✔️ Yes
+
+When should you NOT use Web Workers?
+-> Small tasks
+-> DOM manipulation
+-> Frequent UI updates
+
+---------------------------------------------------------------
+class vs prototype
+---------------------------------------------------------------
+Js is working based on the prototype
+Prototype is the Mechanism where the javascript object inherit properties and methods from the other objects.
+
+function Person(){
+  this.name = name;
+}
+
+Person.prototype.sayHi = function(){
+  console.log("Hi"+ this.name)
+}
+
+const p1 = new Person("Naveen");
+p1.sayHi();
+
+Class
+it provides clean and familiar syntax on top of prototype
+
+class Person {
+  constructor(name) {
+    this.name = name;
+  }
+
+  sayHi() {
+    console.log("Hi " + this.name);
+  }
+}
+
+const p1 = new Person("Naveen");
+p1.sayHi();
+
+Are They Different Internally?
+❌ No
+✔️ Both use prototypes internally
+
+Key Differences (Interview Table 🔥)
+Feature	Prototype	Class
+Syntax	Function-based	Cleaner, OOP-style
+Readability	Harder	Easier
+Hoisting	Function hoisted	❌ Not hoisted
+
+---------------------------------------------------------------
+iterators
+---------------------------------------------------------------
+It is the object and which we can loop through one by one on demand.
+it will return an object as {value:any,done:boolean}
+
+Example: Built-in Iterator
+
+const arr = [10,20,30,40];
+const iterator = arr[Symbol.iterator]();
+
+console.log(iterator.next()); // { value: 10, done: false }
+console.log(iterator.next()); // { value: 20, done: false }
+console.log(iterator.next()); // { value: 30, done: false }
+console.log(iterator.next()); // { value: undefined, done: true }
+
+Where Iterators are used automatically?
+
+These use iterators internally:
+
+for...of
+Spread operator ...
+Array.from()
+
+---------------------------------------------------------------
+generators
+---------------------------------------------------------------
+Generator is the special function that 
+can pause the execution
+resume it later
+after pause we will get the iterator as return automatically
+
+functions number(){
+  yield 1;
+  yield 2;
+  yield 3;
+}
+
+const gens = numbers();
+
+console.log(gen.next()); // { value: 1, done: false }
+console.log(gen.next()); // { value: 2, done: false }
+console.log(gen.next()); // { value: 3, done: false }
+console.log(gen.next()); // { value: undefined, done: true }
+
+yield = pause + return value
+
+Generator with for...of
+function* fruits() {
+  yield "apple";
+  yield "banana";
+  yield "mango";
+}
+
+for (let fruit of fruits()) {
+  console.log(fruit);
+}
+
+Real-World Use Cases (Very Important for Interviews)
+✅ 1. Lazy Loading / Large Data
+function* infiniteNumbers() {
+  let i = 1;
+  while (true) {
+    yield i++;
+  }
+}
+👉 Generates values only when needed
+
+---------------------------------------------------------------
+high order function
+---------------------------------------------------------------
+
+It is a function where it that operates on other functions by taking them as argument or return of the function
+
+simple example - function as agrument
+
+function greet(name){
+  return "Hi" + name;
+}
+
+function welcome(fn){
+  return fn("Naveen");
+}
+
+console.log(welcome(greet))
+✔ welcome is a higher-order function
+✔ greet is a callback function
+
+simple example - function return another function
+
+function multiplier(number){
+  return function(times){
+    return times * number;
+  }
+}
+
+const double = multiplier(5);
+console.log(double(2)) //10
+
+✔ multiplier is a HOF
+✔ This is also closure + currying
+
+Built-in Higher-Order Functions (VERY IMPORTANT)
+
+These are classic interview answers:
+
+🔹 map()
+const nums = [1, 2, 3];
+
+const squares = nums.map(n => n * n);
+console.log(squares); // [1, 4, 9]
+map, filter, reduce are pure higher-order functions
+
+HOF vs Callback (Common Confusion)
+Term	Meaning
+Higher-Order Function	Function that accepts/returns functions
+Callback Function	Function passed to another function
+
+---------------------------------------------------------------
+Array methods
+---------------------------------------------------------------
+
+Adding / Removing Elements (Mutates Array ⚠️)
+🔹 push() – add at end
+arr.push(4);
+
+🔹 pop() – remove from end
+arr.pop();
+
+🔹 unshift() – add at start
+arr.unshift(0);
+
+🔹 shift() – remove from start
+arr.shift();
+
+🔹 join()
+["a", "b", "c"].join("-"); // "a-b-c"
+
+🔹 split() (string method but related)
+"a-b-c".split("-"); // ["a", "b", "c"]
+
+🔹 some()
+
+👉 At least one element matches
+
+[1, 2, 3].some(n => n > 2); // true
+
+🔹 every()
+
+👉 All elements match
+
+[1, 2, 3].every(n => n > 0); // true
+
+Mutating vs Non-Mutating
+
+❌ Mutating → push, pop, splice, sort
+
+✅ Non-mutating → map, filter, slice, reduce
+
+---------------------------------------------------------------
+Slice vs Splice
+---------------------------------------------------------------
+
+Slice
+It return a new array
+Does not change the original array
+
+syntax
+arr.slice(start,end previous value) -> (1,3) -> means start 1 index end with 3 before value
+
+const arr = [1, 2, 3, 4, 5];
+
+const result = arr.slice(1, 4);
+
+console.log(result); // [2, 3, 4]
+console.log(arr);    // [1, 2, 3, 4, 5]
+
+Omitting the end parameter
+const fruits = ["Apple", "Banana", "Orange", "Mango", "Pineapple"];
+
+const tropical = fruits.slice(2);
+console.log(tropical); // ['Orange', 'Mango', 'Pineapple']
+
+Using negative indices
+
+const fruits = ["Apple", "Banana", "Orange", "Mango", "Pineapple"];
+
+const lastTwo = fruits.slice(-2);
+console.log(lastTwo); // ['Mango', 'Pineapple']
+
+Splice
+Changes the original array
+can remove, add or replace the elements
+return the removed elements
+
+Syntax
+array.splice(start, deleteCount, item1, item2, ...)
+Remove elements
+const arr = [1, 2, 3, 4, 5];
+
+const removed = arr.splice(1, 2);
+
+console.log(removed); // [2, 3]
+console.log(arr);     // [1, 4, 5]
+
+Add elements user 0 in the delectecounts
+
+const arr = [1, 2, 4];
+
+arr.splice(2, 0, 3);
+
+console.log(arr); // [1, 2, 3, 4]
+
+Replace elements use 1 in the delectecounts
+
+const arr = [1, 2, 3];
+
+arr.splice(1, 1, 99);
+
+console.log(arr); // [1, 99, 3]
+
+---------------------------------------------------------------
+flat vs flatmap
+---------------------------------------------------------------
+
+flat
+it flatten the nested array
+-> return the new array
+-> does not modify the original array
+
+Syntax
+array.flat(depth)
+
+depth is how deep the flattern should happened
 
 
+const arr = [1,[2,[3,4]]];
+console.log(arr.flat(1)); // [1, 2, [3, 4]]
+console.log(arr.flat(2)); // [1, 2, 3, 4]
+
+Use Infinity to flatten fully:
+arr.flat(Infinity);
+
+flatMap() – Map + flat (depth = 1)
+👉 What it does
+
+First maps each element
+
+Then flattens one level
+
+Equivalent to: array.map().flat(1)
+
+When to Use What? (Interview Answer)
+
+Use flat() when:
+
+You already have nested arrays
+
+You only want to flatten
+
+Use flatMap() when:
+
+You want to transform + flatten
+
+Avoid extra map().flat() call
