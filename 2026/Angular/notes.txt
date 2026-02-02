@@ -1,0 +1,407 @@
+-------------------------------
+Component life cycle orders
+-------------------------------
+Components orders are
+-> construction
+-> ngonchanges
+-> ngoninit
+-> ngDoCheck - runs on every change detector
+-> ngAfterContentInit - runs after ng-content is projected 
+-> ngAfterContentChecked
+-> ngAFterViewInit
+-> ngAfterVIewCHecked
+-> ngOnDestroy
+
+->ngDoCheck
+    -> runs on every change detector triggers
+
+-> ngAfterContentInit
+    -> runs on ng content is projected
+    -> when we use <ng-content>
+
+-> ngAfterContentChecked
+    -> runs after projected content id ngAfterVIewCHecked
+    -> its keep on calls be carefull
+
+-> ngAfterViewInit
+    -> runs when component view and child view is ready   
+
+-------------------------------
+One way bind vs two way bind
+-------------------------------
+
+one way -> html to ts
+click, input,change,keyup
+
+two way binding
+ngModel
+export class UserComponent {
+  userName: string = '';
+}
+
+<input type="text" [(ngModel)]="userName" placeholder="Enter name" />
+
+<p>You entered: {{ userName }}</p>
+
+[(ngModel)]="userName" is equals to [value]="userName" (input)="userName = $event.target.value"
+
+-------------------------------
+Directive
+-------------------------------
+Changes the behaviour or appearance of a DOM element
+Types
+-> Structure Directive
+-> Attribute Directive
+-> Custom Directive
+
+Structure Directive - add/remove elements
+    -> *ngIf,*ngSwitch,*ngFor 
+
+ex:
+<li *ngFor="let user of users; index as i"</li>
+
+<div [ngSwitch]="role">
+    <p *ngSwitchCase="'admin'">Admin Panel</p>
+    <p *ngSwitchCase="'user'">User Panel</p>
+    <p *ngSwitchDefault>Guest Panel</p>
+</div>
+
+Attribute Directive -> changes appearance or behaviour of elements
+    -> ngClass,ngStyle
+ngClass
+ts 
+isActive = true;
+html
+<p [ngClass]="{active : isActive, inactive : !isActive}">Status</p>
+
+ngStyle
+
+ts 
+color ="green"
+
+html
+<p [ngStyle]="{color:color}"></p>
+
+Custom Directive
+commant to create ng g directive highlight
+
+export class HighlightDirective {
+
+  constructor(private el: ElementRef) {}
+
+  @HostListener('mouseenter')
+  onMouseEnter() {
+    this.el.nativeElement.style.backgroundColor = 'yellow';
+  }
+
+  @HostListener('mouseleave')
+  onMouseLeave() {
+    this.el.nativeElement.style.backgroundColor = '';
+  }
+}
+
+<p appHighlight>Hover me</p>
+
+Common Interview Questions 💡
+❓ Why does *ngIf use *?
+
+👉 It is syntactic sugar for <ng-template>
+
+<p *ngIf="show">Hello</p>
+
+
+is same as:
+
+<ng-template [ngIf]="show">
+  <p>Hello</p>
+</ng-template>
+
+-------------------------------
+@HostListener
+-------------------------------
+It is the decorator used to listen to the events of the host element or component.
+
+-------------------------------
+Element Ref
+-------------------------------
+It is the Angular wrapper around a native DOM element.
+It is direct access to the  DOM which leads to security issues
+
+-------------------------------
+Renderer2
+-------------------------------
+
+Angular service used to safely manipulate the DOM 
+Renderer2 performs DOM operations like adding styles, classes, attributes, and event listeners
+
+
+-------------------------------
+Host binding
+-------------------------------
+It is the decprator used to set the properties to the host element to a field in directive
+
+-------------------------------
+DI
+-------------------------------
+Angular creates and injects dependencies automatically instead of us creating them using new
+
+-------------------------------
+Services
+-------------------------------
+Services help share data and logic across components.
+
+providedIn: 'root' makes it a singleton service.
+
+-------------------------------
+Hierarchical Dependency Injection
+-------------------------------
+Platform Injector
+        ↓
+Root Injector (AppModule)
+        ↓
+Module Injector
+        ↓
+Component Injector
+
+-------------------------------
+BehaviorSubject vs Subject
+-------------------------------
+
+Subject
+-> It doest have inital value
+-> It gets emitted only after the subcribe
+
+ex:
+const subject = new Subject();
+
+subject.next(1);
+
+subject.subcribe((val)=> console.log(val));
+
+subject.next(2);
+
+output
+2
+BehaviorSubject
+-> Need to give inital value
+-> It emits latest value immediately
+
+const behaviour = new BehaviorSubject(0);
+
+behaviour.subcribe((val)=> cosnole.log(val)) //0
+
+behavior.next(1);
+behavior.next(2);
+
+behaviour.subcribe((val)=> cosnole.log(val)) //2
+
+
+Output
+0
+1
+2
+2
+
+-------------------------------
+Hot vs Cold Observables
+-------------------------------
+
+Cold Observables
+-> Each subcribers has its own independent data stream
+example is HttpClient calls and Observables created with new Observable
+
+Hot Observable
+-> It shares the same execution amoung all the subcribers
+example Subject,BehaviorSubject etc
+
+-------------------------------
+async pipe (AsyncPipe)
+-------------------------------
+It is the Angular pipe which automatically subcribe 
+Syntax
+<div>{{ observableData$ | async }}</div>
+
+ex
+ts
+counter$ = interval(1000);
+
+html
+<p>Count: {{ counter$ | async }}</p>
+
+Without AsyncPipe we need to Manual Subscription
+this.observableData$.subscribe(data => {
+  this.data = data;
+});
+-> Need to unsubscribe manually (ngOnDestroy)
+-> Boilerplate code
+
+
+-------------------------------
+RXJS
+-------------------------------
+
+-> merge
+    -> Combines multiple observables simultaneously and emits the value as the come
+ex:
+    const obs1 = interval(1000).pipe(take(3)); // 0,1,2 every 1s
+const obs2 = of('A', 'B'); // emits immediately
+
+merge(obs1, obs2).subscribe(val => console.log(val));
+output:
+A
+B
+0
+1
+2
+
+-> concat
+    -> Combines multiple Observable sequencial, one after other
+    -> Waits for the first observable to finish then go the next
+ex:
+const obs1 = of(1,2,3);
+const obs2 = of('A','B');
+
+concat(obs1, obs2).subscribe(val => console.log(val));
+ouput:
+1
+2
+3
+A
+B
+
+-> combineLatest()
+    ->Combine latest values from all the observables
+ex:
+const obs1 = interval(1000).pipe(take(3)); // 0,1,2
+const obs2 = interval(500).pipe(take(5));  // 0,1,2,3,4
+
+combineLatest([obs1, obs2]).subscribe(([val1, val2]) => {
+  console.log(val1, val2);
+});
+
+-> forkJoin()
+    -> It waits for all observable to complete and then return the all observable values
+ex:
+const obs1 = of(1).pipe(delay(1000));
+const obs2 = of(2).pipe(delay(2000));
+
+forkJoin([obs1, obs2]).subscribe(([val1, val2]) => {
+  console.log(val1, val2);
+});
+
+Output (after 2 seconds):
+1 2
+
+-> switchMap()
+    ->It cancels the previous inner observable and switches to latest one
+ex:
+searchInput$
+  .pipe(
+    switchMap(term => this.http.get(`/api/search?q=${term}`))
+  )
+  .subscribe(result => console.log(result));
+
+-> mergeMap()
+    -> Runs all inner observales in parallel
+    -> Does not cancel any request
+    -> Order is not guaranteed and server will crash if it misused
+
+ex: 
+of(1,2,3)
+  .pipe(
+    mergeMap(id => this.http.get(`/api/user/${id}`))
+  )
+  .subscribe(console.log);
+
+->concatMap
+    -> It queues the inner observable and runs one after another
+    -> Maintain order but it is slower
+
+of(1,2,3)
+  .pipe(
+    concatMap(id => this.http.post('/api/save', id))
+  )
+  .subscribe(console.log);
+
+-> exhaustMap()
+    -> Ignore new emission while one is active
+    -> Does not cancel just ignores
+    Best for login,submit button
+ex;
+loginClick$
+  .pipe(
+    exhaustMap(() => this.http.post('/api/login', credentials))
+  )
+  .subscribe(console.log);
+✅ Prevents duplicate requests
+❌ Ignores later clicks
+
+-> takeUntil()
+    -> It automatically unsubscribe from a source observable when another observable emits
+
+ex:
+export class DemoComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+
+  ngOnInit() {
+    this.service.data$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => console.log(data));
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+}
+
+-> distinctUntilChanged
+    -> Emits only when getting the different value compared to previous value
+ex:
+of(1,1,2,2,3,3)
+  .pipe(distinctUntilChanged())
+  .subscribe(console.log);
+
+Output:
+1
+2
+3
+
+-------------------------------
+Signals
+-------------------------------
+    -> A signal is a reactive variable that automatically updates the UI when its value changes.
+    -> No Subcribe/unsubscribe
+ex:
+import { signal } from '@angular/core';
+
+count = signal(0);
+
+Computed Signals
+
+doubleCount = computed(() => this.count() * 2);
+<p>Double: {{ doubleCount() }}</p>
+
+effect
+    -> It runs when the signal changes 
+effect(()=>{
+    console.log(this.counts());
+})
+
+-------------------------------
+CanActive
+-------------------------------
+    -> its is route guard that detemined if a user can access to the route
+    -> It runs before the route is loaded
+
+-------------------------------
+ActivatedRoute
+-------------------------------
+    -> It tells where you are in the currnet route and give the params,query params and URL info
+
+-------------------------------
+trackBy
+-------------------------------
+
+It helps Angular reuse existing DOM elements instead of recreating them.
+

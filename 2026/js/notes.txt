@@ -15,7 +15,7 @@ Object Freeze and Sealing
 ---------------------------------------------------------------
 
 Object.freeze(obj); //this object does not have add/update/delete
-Object.freeze(obj); //update allowed
+Object.seal(obj); //update allowed
 
 Difference between == and === for objects?
 if we try {} == {} it will be false.
@@ -198,9 +198,9 @@ const user :{
 
 function greet(){
     console.log(this.name)
-}
+} 
 
-greet() -> undefiend
+greet(user) -> undefiend
 
 When we use call
 greet.call(user); -> naveen
@@ -1207,3 +1207,49 @@ Use flatMap() when:
 You want to transform + flatten
 
 Avoid extra map().flat() call
+
+---------------------------------------------------------------
+DebounceTime vs ThrottleTime
+---------------------------------------------------------------
+
+DebounceTime – “Wait till user stops”
+👉 What it does
+-> Waits for silence
+-> Executes only after events stop for given time
+-> If events keep coming → timer resets
+
+ex:
+function debounce(fn, delay) {
+  let timer;
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
+const search = debounce((text) => {
+  console.log("API call:", text);
+}, 500);
+
+Throttle
+  -> Runs once per time window
+  -> Exceute at most one time at give  interval of time.
+
+ function throttle(fn,limit){
+  let inThrottle = false;
+
+  return function(...args){
+    if(!inThrottle){
+      fn.apply(this,args);
+      inThrottle = true;
+      setTimeout(()=> inThrottle=false,limit)
+    }
+  }
+ } 
+
+ const onScroll = throttle(() => {
+  console.log("Scroll event");
+}, 1000);
+
+🔹 Scrolling continuously
+👉 Runs once every 1 second
