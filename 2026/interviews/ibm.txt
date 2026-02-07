@@ -1,0 +1,29 @@
+--------------------------
+Question 1
+--------------------------
+
+Given an integer n that is divisible by 4, define
+
+v = n ⊕ (n+1) ⊕ (n+2) ⊕ ... ⊕ x
+
+
+where n ≤ x < nextPowerOfTwo(n).
+
+Find the value of x for which v is maximum.
+Return x.
+
+------------------------
+Question 2
+------------------------
+
+Given a binary string s containing only '0' and '1',
+find the minimum number of flips required to make the string alternating.
+
+An alternating string can be:
+
+010101...
+or
+101010...
+
+
+Return the minimum flips needed.

@@ -1,0 +1,288 @@
+----------------------------
+React works (eco system)
+-----------------------------
+In Big Picture
+Think React as 3 things working together:
+    Components → UI building blocks
+    Virtual DOM → Smart UI update system
+    Reconciliation → Deciding what to update
+
+1️⃣ React basic flow (VERY IMPORTANT)
+Step-by-step flow:
+    State / Props change
+            ↓
+    Component re-renders
+            ↓
+    New Virtual DOM created
+            ↓
+    React compares old vs new Virtual DOM (diffing)
+            ↓
+    Only required changes update Real DOM
+
+Virtual DOM
+    Lightweight JavaScript object
+    Copy of the Real DOM
+    Created by React
+
+Reconciliation & Diffing (interview gold ⭐)
+Reconciliation
+    It is process of comparing old Virtual DOM with new Virtual DOM
+
+Diffing algorithm rule
+    -> Same element type -> update only the changed props
+    -> different element type -> destroy and recreate the node 
+    -> use Keys to track the item and update the changed item alone    
+
+
+-----------------------------
+JSX
+-----------------------------
+It lets to write HTML inside javascript.
+
+ex:
+const element = <p>Hello Naveen</p>
+
+How JSX complies
+    -> Browser dont understand the jsx straighlty.
+    -> Jsx is not executed directly in browser engine
+    -> JSx is converted to Babel during the build time 
+So,
+    Browser understands JavaScript
+    React works with React.createElement
+    JSX is just syntactic sugar
+
+Is JSX mandatory in React?
+Answer:
+No. JSX is optional. React internally uses React.createElement, and JSX is just syntactic sugar compiled by Babel.
+
+--------------------------------------
+Controlled and UnControlled components
+--------------------------------------
+Controlled
+    -> Form data is stored in State
+    -> Input values is stored in State
+
+Ex:
+Controlled
+function Login() {
+  const [email, setEmail] = React.useState("");
+
+  return (
+    <input
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      placeholder="Email"
+    />
+  );
+}
+
+Flow:
+User types → onChange → setState → re-render → value updated
+Controlled components give React full control over form state.
+Single source of truth
+
+Uncontrolled component
+DOM controls the form values
+Access via ref no react involment
+
+
+
+-----------------------------
+UseRef
+-----------------------------
+-> Access DOM element directly
+-> Store mutable values that do not cause re renders
+
+Majorly useRef will help to access the DOM and DOm kind of working
+It is safe and simple to use.
+
+Ex:
+const countRef = useRef(0);
+  const handleClick = () => {
+    countRef.current += 1;
+    console.log(countRef.current);
+  };
+
+return <button onClick={handleClick}>Click</button>;
+-> Value will persist,
+-> No re-renders
+
+Rule:
+
+If UI should change → useState
+If logic should persist → useRef
+
+-----------------------------
+useMemo
+-----------------------------
+UseMemo memorize the value and React dont recheck it on every re-renders
+
+How it helps means
+    -> useMemo improves performance by memoizing expensive computations.
+
+const expensiveValue = React.useMemo(
+  () => slowFunction(count),
+  [count]
+);
+
+const filteredUsers = useMemo(() => {
+  return users.filter(u => u.active);
+}, [users]);
+
+-----------------------------
+useCallback
+-----------------------------
+    -> It memorize the function.
+    -> Returns the same function instance every time when calling unless the dependency changes
+Ex:
+const handleClick = React.useCallback(() => {
+  console.log("Clicked");
+}, []);
+Real-world use cases
+1️⃣ Passing handlers to child
+<SaveButton onSave={handleSave} />
+2️⃣ Dependency of useEffect
+useEffect(() => {
+  fetchData();
+}, [fetchData]);
+3️⃣ Prevent infinite loops
+const fetchData = useCallback(() => {
+  // api call
+}, []);  
+
+-----------------------------
+useContext
+-----------------------------
+Context api is used to share the data globally without passing at every levels
+
+3 parts
+-> createContext
+-> Provider
+-> useContext
+
+createContext:
+  -> // UserContext.js
+import { createContext } from "react";
+
+export const UserContext = createContext(null);
+
+Provider:
+// App.js
+import { UserContext } from "./UserContext";
+import Dashboard from "./Dashboard";
+
+export default function App() {
+  const user = { name: "Naveen", role: "Admin" };
+
+  return (
+    <UserContext.Provider value={user}>
+      <Dashboard />
+    </UserContext.Provider>
+  );
+}
+
+useContext
+//Dashboard.jsx
+
+// Dashboard.js
+import { useContext } from "react";
+import { UserContext } from "./UserContext";
+
+export default function Dashboard() {
+  const user = useContext(UserContext);
+
+  return <h2>Welcome {user.name}</h2>;
+}
+VERY IMPORTANT: Context re-render behavior ⚠️
+
+When context value changes → ALL consuming components re-render
+
+“Context is not a replacement for state management libraries.
+It’s best for low-frequency updates like auth, theme, locale.”
+
+-----------------------------
+batching
+-----------------------------
+It will group multiple state and updates as single re-render
+
+In React 17
+The batching will happen only in React events side
+ex:
+function App() {
+  const [count, setCount] = React.useState(0);
+  const [flag, setFlag] = React.useState(false);
+
+  const handleClick = () => {
+    setCount(c => c + 1);
+    setFlag(f => !f);
+  };
+}
+👉 Result: 1 re-render ✅
+
+❌ Outside React event (NO batching)
+setTimeout(() => {
+  setCount(c => c + 1);
+  setFlag(f => !f);
+}, 1000);
+👉 Result in React 17: 2 re-renders ❌
+
+React 18 — Automatic Batching 🚀
+React 18 behavior
+
+Batching works everywhere:
+  setTimeout
+  Promises
+  async/await
+  Native event handlers
+
+-----------------------------
+Concurrent Rendering
+-----------------------------
+
+It allows React to prepare multiple UI updates at the same time without blocking the main thread.
+
+Concurrent rendering
+  -> Render can be paused
+  -> Higher-priority updates run first
+  -> Lower-priority updates wait
+Start render → Pause → Handle user input → Resume render
+
+❌ Concurrent ≠ Parallel
+❌ Concurrent ≠ Multi-threading
+
+📌 Correct statement:
+
+React still runs on a single thread but schedules work more intelligently.
+
+What can React interrupt?
+
+React can pause:
+  -> Rendering
+  -> Reconciliation
+
+React cannot interrupt:
+  -> Browser DOM updates
+  -> JavaScript execution already running
+
+-----------------------------
+createRoot vs ReactDOM.render
+-----------------------------  
+ReactDOM.render
+  -> Uses legacy rendering
+  -> Synchronus rendering
+  -> No concurrent features
+
+ReactDOM.render(<App />, document.getElementById("root"));
+
+createRoot
+  ->(New way – React 18)
+  ->Enables Concurrent Rendering
+  ->Automatic batching
+  ->Better scheduling
+  ->Future-proof API
+
+import { createRoot } from "react-dom/client";
+
+const root = createRoot(document.getElementById("root"));
+root.render(<App />);
+

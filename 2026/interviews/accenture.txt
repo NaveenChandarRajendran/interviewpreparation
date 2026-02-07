@@ -1,0 +1,29 @@
+1) Very basic angular questions.
+
+Create the service methods carService
+
+i create getCarData
+shown in the UI
+
+2) Frequency of users
+users = [
+    {
+        id:1,
+        name:"Naveen"
+    },
+     {
+        id:2,
+        name:"Gayathri"
+    },
+     {
+        id:3,
+        name:"Krish"
+    },
+     {
+        id:4,
+        name:"Naveen"
+    }
+]
+Output:
+naven : 2
+
