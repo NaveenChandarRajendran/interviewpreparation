@@ -1,0 +1,26 @@
+Question 1
+    var x=1
+    let x=1
+    const x=1
+    What scope is this
+
+Question 2
+    const x =[1,2,3,4];
+    x.push(5);
+    is this possible?
+
+Question 3
+    What is Block and inline Block elements
+
+Question 4 
+    Other than Promise in micro task and setTimeout and setInterval what example you can give?
+
+Question 5
+    cahce bursst and cahce <something old i forgot>
+
+Question 6
+    What is XSS and CSRF
+
+Question 6
+    parseQuery("https://www.abc.com?param1=123&param2=hello");
+    Write function for parseQuery and return as // → { param1: "123", param2: "hello" }

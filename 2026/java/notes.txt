@@ -1,0 +1,424 @@
+---------------------
+OOPS
+---------------------
+Designing the application
+
+Types:
+    -> Encapsulation
+    -> Inheritance
+    -> Polymorphism
+    -> Abstraction
+
+Encapsulation
+    -> Wrapping data + methods and hiding the internal details
+
+Ex:
+class BankAccount {
+    private double balance;   // data hiding
+
+    public void deposit(double amount) {
+        balance += amount;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+}
+
+Inheritance:
+    -> Onee class acquires properties from the other class
+
+Ex:
+class Vehicle {
+    void start() {
+        System.out.println("Vehicle started");
+    }
+}
+
+class Car extends Vehicle {
+    void drive() {
+        System.out.println("Car is driving");
+    }
+}
+
+Polymorphism:
+    -> Same method name but different behaviours
+
+Types:
+    -> compile-time (Methods overloading)
+    -> Runtime (Methods Overriding)
+
+Method Overloading (Compile-time)
+Ex:
+class Calculator {
+    int add(int a, int b) {
+        return a + b;
+    }
+
+    double add(double a, double b) {
+        return a + b;
+    }
+}
+
+Method Overriding (Runtime)
+class Animal {
+    void sound() {
+        System.out.println("Animal sound");
+    }
+}
+
+class Dog extends Animal {
+    @Override
+    void sound() {
+        System.out.println("Dog barks");
+    }
+}
+
+Real-life example
+
+👉 Payment
+
+Pay by Card
+
+Pay by UPI
+
+Pay by NetBanking
+Same method: pay(), different behavior
+
+Abstraction:
+    -> Hiding implementation details and showing the what is necessary
+
+abstract class Shape {
+    abstract void draw();
+}
+
+class Circle extends Shape {
+    void draw() {
+        System.out.println("Drawing circle");
+    }
+}
+
+FAQ
+1. Difference between Abstraction and Encapsulation?
+Answer:
+    Encapsulation = how data is hidden
+    Abstraction = what data is shown
+
+2. Can we achieve multiple inheritance in Java?
+
+Answer:
+    Using classes ❌ No
+    Using interfaces ✅ Yes
+    Reason: Avoids Diamond Problem
+
+3. Why Java does not support multiple inheritance using classes?
+
+Answer:
+    To avoid ambiguity
+    JVM cannot decide which parent method to call
+
+---------------------
+Composition
+---------------------
+    -> One class contains another class by fields not by inheritance
+
+Ex:
+class Engine {
+    void start() {
+        System.out.println("Engine started");
+    }
+}
+
+class Car {
+    private Engine engine;   // HAS-A
+
+    Car() {
+        engine = new Engine();
+    }
+
+    void drive() {
+        engine.start();
+        System.out.println("Car is driving");
+    }
+}
+
+-----------------------------
+Composition vs Inheritance
+-----------------------------
+
+| Inheritance               | Composition          |
+| ------------------------- | -------------------- |
+| IS-A                      | HAS-A                |
+| Tight coupling            | Loose coupling       |
+| Less flexible             | More flexible        |
+| Compile-time relationship | Runtime relationship |
+| `extends` keyword         | Object reference     |
+
+---------------------------------------------
+Why Composition is better than Inheritance?
+---------------------------------------------
+Problem with Inheritance
+class Bird {
+    void fly() {}
+}
+class Penguin extends Bird {
+    // Penguin can't fly ❌
+}
+❌ Wrong design
+Penguin IS-A Bird, but can’t fly
+
+Fix using Composition ✅
+interface FlyBehavior {
+    void fly();
+}
+
+class FlyWithWings implements FlyBehavior {
+    public void fly() {
+        System.out.println("Flying");
+    }
+}
+
+class Penguin {
+    // no flying behavior
+}
+
+---------------------------------------------
+Can an interface have variables and methods?
+---------------------------------------------
+Can an interface have variables?
+Yes but with some rules
+interface Config {
+    int TIMEOUT = 30;
+}
+Important rules (must say in interview 🧠):
+    -> Variables are public static final by default
+    -> You must initialize them
+    -> You cannot change them
+
+Config.TIMEOUT = 40; // ❌ Compile-time error
+
+Can an interface have methods?
+YES — multiple types
+
+---------------------------------------------
+equals() vs ==
+---------------------------------------------
+
+| `==`                           | `equals()`                              |
+| ------------------------------ | --------------------------------------- |
+| Compares **references**        | Compares **content / logical equality** |
+| Checks memory address          | Checks object data                      |
+| Works for primitives & objects | Works for objects only                  |
+| Cannot be overridden           | Can be overridden                       |
+
+1️⃣ == with primitives
+Ex:
+int a = 10;
+int b = 10;
+
+System.out.println(a == b); // true
+👉 Compares value
+👉 No confusion here
+
+2️⃣ == with objects (IMPORTANT)
+String s1 = new String("Java");
+String s2 = new String("Java");
+
+System.out.println(s1 == s2); // false
+👉 Different objects
+👉 Different memory locations
+
+3️⃣ equals() with objects
+String s1 = new String("Java");
+String s2 = new String("Java");
+System.out.println(s1.equals(s2)); // true
+👉 String overrides equals()
+👉 Compares actual content
+
+String Pool example (INTERVIEW GOLD 🥇)
+String s1 = "Java";
+String s2 = "Java";
+
+System.out.println(s1 == s2);       // true
+System.out.println(s1.equals(s2));  // true
+
+Why?
+    -> Both point to same object in String pool
+
+Custom Object Example (VERY IMPORTANT)
+class Employee {
+    int id;
+    String name;
+
+    Employee(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+}
+
+Employee e1 = new Employee(1, "Naveen");
+Employee e2 = new Employee(1, "Naveen");
+
+System.out.println(e1 == e2);        // false
+System.out.println(e1.equals(e2));   // false
+
+Why equals() is false?
+    -> Because default equals() comes from Object class
+    -> It behaves like ==
+
+Correct way: Override equals()
+@Override
+public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Employee)) return false;
+
+    Employee e = (Employee) o;
+    return id == e.id && name.equals(e.name);
+}
+
+Now:
+System.out.println(e1.equals(e2)); // true
+
+1. Why override equals()?
+To compare object content instead of memory reference.
+
+2. What happens if equals is not overridden?
+It behaves like == (reference comparison).
+
+3. Should we override hashCode() when overriding equals()?
+YES (mandatory)
+Otherwise objects won’t work correctly in HashMap / HashSet.
+
+---------------------------------------------
+hasCode
+---------------------------------------------
+
+It returns the int value used by the hash collections of HashMap,HashSet,HashTable
+
+It has two rules
+-> Equal object must have the same hashCode
+Ex:
+If a.equals(b) == true
+Then a.hashCode() == b.hashCode() MUST be true
+
+-> Same hashcode does not mean equal
+Ex:
+If a.hashCode() == b.hashCode()
+a.equals(b) may be true or false
+
+This is called a hash collision.
+
+hashCode → Room number
+equals → Person identity check
+
+Same person ➜ same room
+Different person ➜ maybe same room (collision)
+
+Top 3 Interview Questions 🔥
+❓1. Is it mandatory to override hashCode when overriding equals?
+👉 YES
+
+❓2. Can two unequal objects have same hashCode?
+👉 YES (collision)
+
+❓3. Can hashCode change during object lifetime?
+👉 ❌ Should NOT, if object is used as HashMap key
+
+---------------------------------------------
+toString() usage
+---------------------------------------------
+
+It is used to see the object in readable way helpfull for 
+
+Ex:
+Object obj = new Object();
+System.out.println(obj);
+
+Ouput
+java.lang.Object@6d06d69c
+
+Simple Example (Without override ❌)
+class Employee {
+    int id;
+    String name;
+}
+
+Employee e = new Employee();
+System.out.println(e);
+
+Ouput
+Employee@3f99bd52
+
+Correct Usage: Override toString()
+
+class Employee {
+    int id;
+    String name;
+
+    Employee(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{id=" + id + ", name='" + name + "'}";
+    }
+}
+
+---------------------------------------------
+Immutable class
+---------------------------------------------
+A class whose object state is cannot modifed once created.
+
+Why String is Immutable?
+String s1 = "Java";
+s1.concat(" World");
+
+System.out.println(s1); // Java
+
+concat() creates a new object, doesn’t modify original.
+
+Reasons String is immutable
+
+1️⃣ Security
+    Used in DB URLs, file paths, class loaders
+
+2️⃣ String Pool optimization
+    Reuse objects
+    Save memory
+
+3️⃣ Thread safety
+    Shared between threads safely
+
+4️⃣ HashCode caching
+    Used as HashMap key
+    
+    
+How to create your own Immutable Class ✅ (INTERVIEW FAVORITE)
+Rules (MUST memorize)
+    Make class final
+    Make fields private final
+    No setters
+    Initialize fields via constructor
+    Return defensive copy for mutable fields
+
+Ex:
+final class Employee {
+
+    private final int id;
+    private final String name;
+
+    public Employee(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+}

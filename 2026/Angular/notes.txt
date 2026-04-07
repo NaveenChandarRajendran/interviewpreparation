@@ -235,6 +235,27 @@ this.observableData$.subscribe(data => {
 -> Need to unsubscribe manually (ngOnDestroy)
 -> Boilerplate code
 
+custome pipe
+ng generate pipe myPipe
+
+import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({
+  name: 'myPipe'
+})
+export class MyPipePipe implements PipeTransform {
+
+  transform(value: string): string {
+    return value.toUpperCase() + '!!!';
+  }
+
+}
+
+<p>{{ 'hello naveen' | myPipe }}</p>
+
+Output
+HELLO NAVEEN!!!
+
 
 -------------------------------
 RXJS
