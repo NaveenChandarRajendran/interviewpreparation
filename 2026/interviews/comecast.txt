@@ -1,0 +1,10 @@
+AWS
+1. How you will secure your ec2 instance
+2. What if your ec2 instance fail? what action you will do? How you know your ec2 instance failed
+3. 
+
+
+Java
+1What are the common memory leaks will happen?
+2. If your application is under huge load and hangs what you will do how you will check
+3. 

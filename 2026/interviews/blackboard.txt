@@ -1,3 +1,6 @@
+Angular
+1. How do you route based on the role
+
 Java Question
 1. Common memory leak issues for spring boot.
 2. What is construction injections and field injections
