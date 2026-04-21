@@ -47,7 +47,7 @@ String str = "hello";
 	    
 	    System.out.println(reversed);
 ------------------------------------------------------------------
-4. Palindrom 
+4. Palindrome
 String str = "madam";
 	    String reversed = "";
 	    for(int i=str.length()-1; i >= 0;i-- ){
@@ -61,4 +61,37 @@ String str = "madam";
 	    }
 
 output
-    Palindrome        
+    Palindrome
+------------------------------------------------------------------
+5. Count vowels/consonants 
+
+String str = "hello world";
+int vowels = 0, consonants = 0;
+
+for (int i = 0; i < str.length(); i++) {
+    char c = str.charAt(i);
+    if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
+        vowels++;
+    } else if (c != ' ') {
+        consonants++;
+    }
+}
+
+System.out.println("Vowels: " + vowels);       // 3
+System.out.println("Consonants: " + consonants); // 7
+---------------------------------------------------------------------
+6. First non repeating Character
+
+String str ="swiss";
+		Map<Character, Integer> map = new LinkedHashMap();
+		for(int i=0; i < str.length(); i++){
+		    char c = str.charAt(i);
+		    map.put(c,map.getOrDefault(c,0)+1);
+		}
+		
+		for(Map.Entry<Character,Integer> entry : map.entrySet()){
+		    if(entry.getValue()==1){
+		        System.out.println(entry.getKey());
+		        break;
+		    }
+		}
