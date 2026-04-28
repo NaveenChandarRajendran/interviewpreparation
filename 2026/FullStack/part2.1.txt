@@ -1,0 +1,126 @@
+--------------------------------------------------------
+1. Diff between volatitle and transient variable
+--------------------------------------------------------
+Volatile variable
+    -> Every thread which read from the main memory not from its own cache
+Ex:
+private volatile boolean isRunning = true;
+
+// Thread 1
+while (isRunning) {
+    // do work
+}
+
+// Thread 2
+isRunning = false; // Thread 1 will immediately see this change
+
+Transient variable
+    -> Skip the serialization.
+    -> Used with Serialization only
+    What is serialization?
+        -> Converting java objects to stream of bytes. so it can be saved or sent.
+    Deserialzation
+        -> Converting those bytes to java object.
+        -> Class must implement Serializable
+        ->Java assigns a serialVersionUID
+    So transient variable solve problem is all java object are converted to bytes to ignore some fields we can mention it as transient.
+    ex: - 
+    class User implements Serializable {
+        String username = "naveen";
+        transient String password = "secret123"; // won't be saved
+    }
+    -> transient tells Java — "ignore this field during serialization."
+
+------------------------------------------------------------------------
+2. Differentiate between the Vector and ArrayList collections in Java.
+------------------------------------------------------------------------
+    -> Both are dynamic arrays they grow dynamically.They key difference is thread safety
+    -> Vector is synchronized and making it thread safe but slower
+    -> ArrayList is not synchronized but faster
+    -> Thread Safety — The Real Difference
+    ex: // Vector — every method is synchronized (locked)
+        public synchronized boolean add(E e) { ... }
+        public synchronized E get(int index) { ... }
+
+        // ArrayList — no locks at all
+        public boolean add(E e) { ... }
+        public E get(int index) { ... }
+    ->  ArrayList is preferred and thread safety is handled separately using Collections.synchronizedList()
+    ex: Synchronized wrapper
+        List<String> list = Collections.synchronizedList(new ArrayList<>());
+
+------------------------------------------------------------------------
+3. How is Collection different from Collections in Java.
+------------------------------------------------------------------------
+    -> Collection is an interface that act as root of the collections framework
+        -> Defining common methods like add,remove and size.
+    -> Collections is an utitlity class with static methods like sort,reverse and shuffle that operates on collection objects.
+    Ex:
+        // Collection — defines the structure
+        Collection<String> fruits = new ArrayList<>();
+        fruits.add("Mango");
+        fruits.add("Apple");
+        fruits.add("Banana");
+
+        // Collections — works on it
+        System.out.println(Collections.max(fruits));  // Mango
+        Collections.sort((List<String>) fruits);
+        System.out.println(fruits); // [Apple, Banana, Mango]
+
+------------------------------------------------------------------------
+4. What is ... in the method parameters?
+------------------------------------------------------------------------
+    -> ... is the Java varargs( variable arguments) syntax which allows methods to allow zero to more arguments of the same type.
+    Ex:
+    // Clean!
+        public void print(String... info) { }
+
+        print("Hello");
+        print("Hello", "World");
+        print("Hello", "World", "Java");
+        print(); // zero arguments — also valid!
+    -> Java comverts the varargs to array internally.
+    Ex:
+    public void someMethod(String... info) {
+        System.out.println(info.length); // it's just an array!
+
+        for (String s : info) {
+            System.out.println(s);
+        }
+    }
+    -> it must the last parameter in the method.
+    Ex:
+    // ✅ Correct
+    public void method(int id, String... names) { }
+
+    // ❌ Wrong — compiler error
+    public void method(String... names, int id) { }
+
+----------------------------------------------------------------------------------
+5. Can you write a code for representing thread-safe singleton patterns in Java?
+----------------------------------------------------------------------------------
+public class Singleton {
+
+    // Private constructor — no one can do "new Singleton()"
+    private Singleton() { }
+
+    // Inner class is loaded only when getInstance() is called
+    private static class SingletonHelper {
+        private static final Singleton INSTANCE = new Singleton();
+    }
+
+    public static Singleton getInstance() {
+        return SingletonHelper.INSTANCE;
+    }
+
+    public void showMessage() {
+        System.out.println("Singleton Instance: " + this.hashCode());
+    }
+}
+
+Why it's the best:
+
+✅ Thread-safe without synchronized
+✅ Lazy initialization (created only when needed)
+✅ No performance overhead
+✅ Clean and simple
