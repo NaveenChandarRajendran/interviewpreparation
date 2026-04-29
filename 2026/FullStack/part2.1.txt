@@ -124,3 +124,138 @@ Why it's the best:
 ✅ Lazy initialization (created only when needed)
 ✅ No performance overhead
 ✅ Clean and simple
+
+----------------------------------------------------------------------------------
+6. What is the importance of the hashCode() and equals() contract?
+----------------------------------------------------------------------------------
+    -> THe hasCode-equal contract states if two objects are equal via equals(), they must return the same hasCode().
+    -> If we break the contract like only overriding the equals not hasCode 
+    Ex:
+    class Employee {
+        int id;
+        String name;
+
+        Employee(int id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        // Only overriding equals — NOT hashCode ❌
+        @Override
+        public boolean equals(Object o) {
+            Employee e = (Employee) o;
+            return this.id == e.id && this.name.equals(e.name);
+        }
+    }
+    The bug is 
+    Employee e1 = new Employee(1, "Naveen");
+    Employee e2 = new Employee(1, "Naveen");
+
+    System.out.println(e1.equals(e2));  // ✅ true — same content
+
+    Set<Employee> set = new HashSet<>();
+    set.add(e1);
+
+    System.out.println(set.contains(e2)); // ❌ FALSE — should be true!
+
+    -> The HashSet first checks hashCode(). Since we didn't override it, e1 and e2 get different hashCodes → stored in different buckets → contains() looks in wrong bucket → returns false!
+How HashMap Uses Both Internally
+    map.put(key, value):
+        1. calls key.hashCode()  → finds the bucket (shelf)
+        2. calls key.equals()    → confirms exact match in that bucket
+
+    map.get(key):
+        1. calls key.hashCode()  → goes to correct bucket
+        2. calls key.equals()    → picks the right entry
+    -> If we overide the equals we should override the hascode also.
+
+----------------------------------------------------------------------------------
+7. What is the result of the below code and Why?
+----------------------------------------------------------------------------------            
+Question :
+public class TestClass {
+    public static void main(String[] args) {
+        someMethod(null);
+    }
+    public static void someMethod(Object o) {
+        System.out.println("Object method Invoked");
+    }
+    public static void someMethod(String s) {
+        System.out.println("String method Invoked");
+    }
+}
+
+Output is “String method Invoked”
+Explantion : 
+    -> Java always calls the most specific method that matches the arguments
+    -> String is more specific than the Object because string is subclass of Object.
+    Object
+        └── String   ← more specific (child class)
+    null can be passed to → someMethod(Object o)  ✅ valid
+    null can be passed to → someMethod(String s)  ✅ valid
+
+    Which is more specific?
+    String is a subclass of Object → String wins! ✅
+    ->Among all valid matches, pick the most specific one.
+What If Both Were Equally Specific?
+    public static void someMethod(String s) { }
+    public static void someMethod(Integer i) { }
+
+    someMethod(null); // ❌ Compile Error!
+                    // "ambiguous method call"
+
+    -> Here the String and Integer are siblings so Java can't decide so compilation error will come.
+
+----------------------------------------------------------------------------------
+8. How is the classpath variable different from the path variables?
+----------------------------------------------------------------------------------
+    Path -> Tells the OS where to find the executable programs like java, javac
+    class -> Class path tells JVM to find the your .class files.
+
+--------------------------------------------------------------------------------------------------------
+9.  How would you help a colleague with lesser Java experience who has trouble in serializing a class?
+--------------------------------------------------------------------------------------------------------
+    -> i would check if the collegue has implemented java.io.serializable interface.
+    -> I will check if he is trying to serialze only non static methods because static methods are not allowed.
+    -> I will also check if the fields are defined as transient or not because it will skip the serializing.
+
+-----------------------------------------------------------------------------------------------------------------
+10.  What is the best possible way to call the wait() method - by using the if construct or the loop construct?
+-----------------------------------------------------------------------------------------------------------------
+Answer is loop construct.
+Explanations:
+    wait() -> it pause the thread and release the lock untill another thread calls
+    ex:
+    synchronized (lock) {
+        lock.wait();   // thread pauses here, releases lock
+    }
+The Problem with if ❌
+    synchronized (lock) {
+        if (queue.isEmpty()) {       // check once
+            lock.wait();             // wait...
+        }
+        process(queue.remove());     // dangerous! ❌
+    }
+    A thread can wake up from wait() on its own, randomly, without being notified.
+Thread wakes up randomly
+    ↓
+if construct — condition NOT re-checked ❌
+    ↓
+queue might still be empty
+    ↓
+queue.remove() → crashes! 💥
+
+Correct Way — while Loop ✅ 
+synchronized (lock) {
+    while (queue.isEmpty()) {    // keeps rechecking ✅
+        lock.wait();
+    }
+    process(queue.remove());     // safe! queue is guaranteed non-empty
+}
+Thread wakes up (spurious or notifyAll)
+    ↓
+while rechecks condition
+    ↓
+queue still empty? → wait() again ✅
+queue has item?   → proceed safely ✅
+
