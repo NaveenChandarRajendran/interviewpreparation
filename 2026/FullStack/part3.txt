@@ -130,3 +130,113 @@ List<Integer> result = flatnum.stream()
         .toList();
 
 System.out.println(result); // [1, 2, 3, 4, 5, 6, 7, 8]
+
+Problem 6 — Find Duplicate Numbers
+Questions
+Input:  [1, 2, 3, 2, 4, 3, 5]
+Output: [2, 3]
+
+Answers
+    List<Integer> nums = List.of(1, 2, 3, 2, 4, 3, 5);
+        List<Integer> dupNums = nums.stream()
+                .filter(n -> Collections.frequency(nums, n) > 1)
+                .distinct()
+                .toList();
+        System.out.println(dupNums);
+
+Problem 7 - Group Employees by Department
+Input:  [("Alice","CSE"), ("Bob","ECE"), ("Charlie","CSE"), ("Dave","ECE")]
+Output: {CSE=[Alice, Charlie], ECE=[Bob, Dave]}
+
+Answers:
+class Employee {
+            String name;
+            String department;
+
+            Employee(String name, String department) {
+                this.name = name;
+                this.department = department;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public String getDepartment() {
+                return department;
+            }
+        }
+
+        List<Employee> employees = List.of(
+                new Employee("Alice", "CSE"),
+                new Employee("Bob", "ECE"),
+                new Employee("Charlie", "CSE"),
+                new Employee("Dave", "ECE"));
+
+        Map<String, List<String>> deptNames = employees.stream()
+                .collect(Collectors.groupingBy(Employee::getDepartment,
+                        Collectors.mapping(Employee::getName, Collectors.toList())));
+        System.out.println(deptNames);
+
+
+ Problem 8 — Convert List to map
+ Questions
+ Input:  [("Alice", 60000), ("Bob", 75000), ("Charlie", 70000)]
+Output: {Alice=60000, Bob=75000, Charlie=70000}
+
+ Answers:
+ List<Employee> employees = List.of(
+    new Employee("Alice",   60000),
+    new Employee("Bob",     75000),
+    new Employee("Charlie", 70000)
+);
+
+Map<String, Integer> result = employees.stream()
+        .collect(Collectors.toMap(
+                Employee::getName,      // key   → name
+                Employee::getSalary     // value → salary
+        ));
+
+System.out.println(result);
+// {Alice=60000, Bob=75000, Charlie=70000}     
+
+Problem 9 — Sort Employees by Salary then Name
+Given a list of Employee objects, sort by salary ascending.
+If salary is same, sort by name alphabetically.
+
+Input:  [("Alice",70000), ("Bob",50000), ("Charlie",70000), ("Dave",50000)]
+Output: [Dave-50000, Bob-50000, Alice-70000, Charlie-70000]
+List<Employee> employees = List.of(
+                new Employee("Alice", 70000),
+                new Employee("Bob", 50000),
+                new Employee("Charlie", 70000),
+                new Employee("Dave", 50000));
+
+        List<Employee> sort = employees.stream()
+                .sorted(Comparator.comparingInt(Employee::getSalary)
+                        .thenComparing(Employee::getName))
+                .toList();
+        sort.forEach(e -> System.out.println(e.getName() + " " + e.getSalary()));
+
+Problem 10 — Sum of Salaries by Department
+Given a list of Employee objects, find total salary spent
+per department.
+
+Input:  [("Alice","CSE",60000), ("Bob","ECE",50000), ("Charlie","CSE",70000)]
+Output: {CSE=130000, ECE=50000}
+
+Answers
+List<Employee> employees = List.of(
+    new Employee("Alice",   "CSE", 60000),
+    new Employee("Bob",     "ECE", 50000),
+    new Employee("Charlie", "CSE", 70000)
+);
+
+Map<String, Integer> result = employees.stream()
+        .collect(Collectors.groupingBy(
+                Employee::getDepartment,              // group by department
+                Collectors.summingInt(Employee::getSalary)  // sum salaries
+        ));
+
+System.out.println(result);
+// {CSE=130000, ECE=50000}
