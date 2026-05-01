@@ -397,4 +397,98 @@ Answer:
     -> Java caches integer object for values of -128 to 127
     -> The 1000 is outside the range
     -> Like Stirng for integer also we need to use .equals() to compare the value.
-    
+--------------------------------------------------------------
+18. Is it necessary to declare all immutable objects as final
+--------------------------------------------------------------
+    -> No its not necessary.
+    -> The immutable objects comes as no setter , final fields and no way to change the state after constructed.
+    -> But final is recommended because it prevent the subclasses from breaking the immutability.
+
+--------------------------------------------------------------
+19. What do you know about Factory Design Pattern in Java
+--------------------------------------------------------------
+    -> It is object creation as a factory method instead of using new keyword directly in client code.
+    -> The Client only interact with common interface while the factory decides which concrete class should inititate based on the input.
+
+Problem Without Factory ❌
+// Client code is tightly coupled to concrete classes
+class Main {
+    public static void main(String[] args) {
+        String type = "circle";
+
+        // Client must know all shape classes — messy!
+        if (type.equals("circle")) {
+            Circle c = new Circle();
+            c.draw();
+        } else if (type.equals("rectangle")) {
+            Rectangle r = new Rectangle();
+            r.draw();
+        } else if (type.equals("triangle")) {
+            Triangle t = new Triangle();
+            t.draw();
+        }
+        // Adding new shape = modifying client code ❌
+    }
+}
+
+Solution With Factory ✅
+
+Step 1 — Create a common Interface
+public interface Shape {
+    void draw();
+}
+
+Step 2 — Create Concrete Classes
+public class Circle implements Shape {
+    @Override
+    public void draw() {
+        System.out.println("Drawing Circle ⭕");
+    }
+}
+
+public class Rectangle implements Shape {
+    @Override
+    public void draw() {
+        System.out.println("Drawing Rectangle ▭");
+    }
+}
+
+public class Triangle implements Shape {
+    @Override
+    public void draw() {
+        System.out.println("Drawing Triangle △");
+    }
+}
+
+Step 3 — Create the Factory Class
+
+public class ShapeFactory {
+
+    // Factory method — decides which object to create
+    public static Shape getShape(String type) {
+        if (type == null) return null;
+
+        switch (type.toLowerCase()) {
+            case "circle":    return new Circle();
+            case "rectangle": return new Rectangle();
+            case "triangle":  return new Triangle();
+            default: throw new IllegalArgumentException(
+                         "Unknown shape: " + type);
+        }
+    }
+}
+
+Step 4 — Client Uses Factory
+public class Main {
+    public static void main(String[] args) {
+
+        // Client doesn't know HOW objects are created
+        Shape s1 = ShapeFactory.getShape("circle");
+        Shape s2 = ShapeFactory.getShape("rectangle");
+        Shape s3 = ShapeFactory.getShape("triangle");
+
+        s1.draw(); // Drawing Circle ⭕
+        s2.draw(); // Drawing Rectangle ▭
+        s3.draw(); // Drawing Triangle △
+    }
+}
