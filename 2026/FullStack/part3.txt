@@ -1,0 +1,132 @@
+Java 8
+    -> Its very important in JAva shift
+    -> It bring the Java Object orineted to functional programming
+    -> It released on 2014.
+    -> It helps to reduce the number of code significantly
+
+Core features
+-> Lambda Expressions
+-> Streams
+
+Streams
+    -> The data can be modifed with several operaiton in one go
+    -> Stream are lazy in nature
+
+ TO convert Arrays, Collections to Streams
+// Array
+ int[] array = {1,2,3,4};
+final IntStream intStream = Array.stream(array);
+
+intStream.forEach(System.out::println);
+
+//Object
+Integer[] objectArray = {1,2,3,4};
+final Stream<Integer> integerStream = Stream.of(objectArray);
+integerStream.forEach(System.out::println);
+
+//Collections
+List<Integer> intergerList = Arrays.asList(1,2,3,4);
+intergerList.stream()
+    .forEach(System.out::println);
+
+Operations are
+    -> filter
+    -> map
+    -> reduce
+    -> distict (used to remove the duplicate items in stream)
+    -> peak (Its wont change the data just we can see the stream after modifed by putting sysout)
+    -> sorted (default it will sort by ascending for decending you can use Comparitor)
+Ex:  List<String> sortedList = stringList.stream()
+                .sorted().toList();
+        sortedList.forEach(System.out::println);
+        // Sort with string length
+        List<String> sortedStringLength = stringList.stream()
+                .sorted(Comparator.comparingInt(String::length)).toList();
+        sortedStringLength.forEach(System.out::println);
+
+     -> skip (skipes the mentioned number items)
+
+
+GroupBy
+    The gtoup always return as Map where key and value
+Visual Summary
+stream()
+   │
+   ▼
+.collect(Collectors.groupingBy(
+            keyExtractor,        ← "how to group?"
+            downstreamCollector  ← "what to do with each group?"
+         ))
+   │
+   ▼
+Map<Key, Result>   
+
+
+problems practiced
+Problem 1 — Filter Even Numbers
+Answer
+  List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8);
+        List<Integer> evenNo = numbers.stream().filter(n -> n % 2 == 0).toList();
+        System.out.println(evenNo);
+
+Output: [2, 4, 6, 8]
+
+Problem 2 — Find Names Starting With "A"
+Answer
+List<String> names = List.of("Alice", "Bob", "Andrew", "Charlie", "Anna");
+        List<String> ANames = names.stream()
+                .filter(n -> n.startsWith("A"))
+                .sorted()
+                .toList();
+        System.out.println(ANames);
+Output: ["Alice", "Andrew", "Anna"]
+
+Problem 3 — Count Words by First Letter
+Given a list of words, group them by their first letter
+and count how many words start with each letter.
+
+Input:  ["apple", "avocado", "banana", "bat", "cherry"]
+Output: {a=2, b=2, c=1}
+
+Answer:
+List<String> fruits = List.of("apple", "avocado", "banana", "bat", "cherry");
+        Map<Character, Long> groupFruit = fruits.stream()
+                .collect(Collectors.groupingBy(s -> s.charAt(0), Collectors.counting()));
+        System.out.println(groupFruit);
+
+Problem 4 — Find the Highest Salary
+Given a list of Employee objects (name, department, salary),
+find the employee with the highest salary.
+
+Input:  [("Alice", "CSE", 60000), ("Bob", "ECE", 75000), ("Charlie", "CSE", 70000)]
+Output: Bob
+
+Answers:
+    List<Student> student = List.of(
+            new Student("Alice", "CSE", 60000),
+            new Student("Bob", "ECE", 75000),
+            new Student("Charlie", "CSE", 70000)
+        );
+
+        String highSalPerson = student.stream()
+            .max(Comparator.comparingInt(Student::getSalary))
+            .map(Student::getName)
+            .orElse("No Student found");
+
+Problem 5 — Flatten a List of Lists
+Given a list of lists of integers, flatten into a single list.
+
+Input:  [[1, 2, 3], [4, 5], [6, 7, 8]]
+Output: [1, 2, 3, 4, 5, 6, 7, 8]
+Answer
+List<List<Integer>> flatnum = List.of(
+    List.of(1, 2, 3),
+    List.of(4, 5),
+    List.of(6, 7, 8)
+);
+
+List<Integer> result = flatnum.stream()
+        .flatMap(list -> list.stream())   // flatten each inner list
+        .toList();
+
+System.out.println(result); // [1, 2, 3, 4, 5, 6, 7, 8]
