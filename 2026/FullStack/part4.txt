@@ -1,0 +1,69 @@
+------------------------------------------------------
+1. What are the key components in Spring Boot
+-----------------------------------------------------
+Four Key components
+    -> Spring Boot auto -configuration
+    -> Spring Boot CLI
+    -> Spring boot starter POMS
+    -> Spring Boot Actuators
+
+-----------------------------------------------------
+2. Why Spring Boot over Spring
+-----------------------------------------------------
+    -> Starter POMS
+    -> Version Management
+    -> Auto configuration
+    -> Component Scanning
+    -> InMemory DB
+    -> Actuators
+
+-----------------------------------------------------
+3. How does Spring Boot works
+-----------------------------------------------------
+    -> SB automaticaaly configure your application based on the depecdency added in the project by using annotations.
+    -> The entry point of the SB application is the class contains @SpringBootApplication and the main method.
+    -> SB automaticaaly scans all the components in the project by using @ComponentScan annotations.
+
+
+------------------------------------------------------------------
+4. What does the @SpringBootApplication annotation do internally?
+------------------------------------------------------------------
+    -> The @SpringBootApplication is equalent of using
+        -> @configuration
+        -> @EnableAutoConfiguration
+        -> @ComponentScan 
+        All these with default attributes
+    ->THis is makes developer to use only one annotation and esay
+
+------------------------------------------------------------------
+5. What is the purpose of using @ComponentScan in the class files?
+------------------------------------------------------------------
+    -> SB application scan all the beans and depecdency when application initialize.
+    -> We need to add the @ComponentScan annotation so the SB will scan our components
+
+------------------------------------------------------------------------
+6. How to get the list of all the beans in your Spring boot application?
+------------------------------------------------------------------------
+    -> SB Actuators /Bean will provide the list.
+
+------------------------------------------------------------------------
+7. What is an IOC container?
+------------------------------------------------------------------------
+    -> It is the framework which used to implement the automatic dependcy injection
+    -> It manages Object creations and its life time and also injects depecdency to the class file.
+------------------------------------------------------------------------
+8. What is dependency Injection?
+------------------------------------------------------------------------     
+    -> Injecting the service throught the project with a single instance
+    Types
+        -> Construction injection
+        -> Field injections
+------------------------------------------------------------------------
+9. Where do we define properties in the Spring Boot application?
+------------------------------------------------------------------------        
+    -> application.proeprties
+------------------------------------------------------------------------
+10. How to enable debugging log in the spring boot application?
+------------------------------------------------------------------------
+    -> Start the application with -- debug switch
+    -> in application.proeprties logging.level.root = debug 

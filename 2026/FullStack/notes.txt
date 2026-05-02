@@ -6,7 +6,7 @@ Parts need to cover
         ->2.3-> Check on claude any other things need to Learn
     -> 3 ->  Java 8
         -> Learn the basics of feature of java 8 and implement that using top 10 basic problems
-    -> Spring Boot top 10 questions and answers
+    -> 4 Spring Boot top 10 questions and answers -Spring Boot top 10 questions and answers
     -> Real scenario based questions and answers
     -> SQL interview based 10 questions.
     -> Top 10 interview queries based Questions.
