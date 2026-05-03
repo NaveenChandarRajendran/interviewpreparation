@@ -67,3 +67,130 @@ Four Key components
 ------------------------------------------------------------------------
     -> Start the application with -- debug switch
     -> in application.proeprties logging.level.root = debug 
+------------------------------------------------------------------------
+11. Can we override or replace the Embedded tomcat server in Spring Boot?
+------------------------------------------------------------------------    
+    -> Yes we can change to any server by using Starter dependcy in pom.xml
+    -> We can use spring-boot-starter-jetty
+---------------------------------------------------------------------------------------------
+12. What are the actuator-provided endpoints used for monitoring the Spring boot application?
+---------------------------------------------------------------------------------------------
+    Main actuator endpoints are
+        -> Health
+        -> Info
+        -> Beans
+        -> Mappings
+        -> Configprops
+        -> Httptrace
+---------------------------------------------------------------------------------------------
+13. Can we disable the default web server in the Spring boot application?
+---------------------------------------------------------------------------------------------
+    -> by puttins spring.main.web-application-type=none
+---------------------------------------------------------------------------------------------
+14. What is the use of Profiles in spring boot?
+---------------------------------------------------------------------------------------------    
+    -> DEV,QA and PRod different environments deal with can specify in application.properties
+    application.properties         → common (always loaded)
+    application-dev.properties     → loaded when profile = dev
+    application-prod.properties    → loaded when profile = prod
+---------------------------------------------------------------------------------------------
+15. Why is @Repository important beyond being a marker annotation?
+---------------------------------------------------------------------------------------------
+    -> Why Repository annoation is need because
+       *) Without this annotation the service layer (@Service) will get the jpa,jdbc error as technology spcific errors
+        which is hard to understand.
+        Ex: 
+        // Without @Repository, you get raw JPA exceptions
+            javax.persistence.NoResultException
+            javax.persistence.PersistenceException
+            org.hibernate.HibernateException
+            java.sql.SQLException (error code 1062 — MySQL duplicate key)
+    -> By using the @Resistory annotation 
+        -> Spring will register the PersistenceExceptionTranslationPostProcessor bean
+        -> THis bean wrapps the @Repository to proxy.
+        -> So what ever error thrown the Repository proxy will send to the PersistenceExceptionTranslator
+        -> This Translator will check with DataAccessException  unchecked hiracky and sned back the clean and understandable errors to Service
+        Ex:
+            DataAccessException  (unchecked)
+                ├── DataIntegrityViolationException   ← duplicate key, FK violation
+                ├── EmptyResultDataAccessException    ← expected 1 row, got 0
+                ├── QueryTimeoutException             ← slow query timeout
+                ├── OptimisticLockingFailureException ← @Version conflict
+                ├── DeadlockLoserDataAccessException  ← DB deadlock
+                └── TransientDataAccessException      ← retry-able failures
+        -> Full flow will be 
+            Your Service calls Repository method
+                        ↓
+            Proxy intercepts the call
+                        ↓
+            Repository method throws HibernateException / SQLException
+                        ↓
+            Proxy catches it → runs PersistenceExceptionTranslator
+                        ↓
+            Translator maps it → Spring's DataAccessException hierarchy
+                        ↓
+            Your Service receives a clean, vendor-neutral exception
+---------------------------------------------------------------------------------------------
+16. What are stereotype annotations in Spring and how are they different?
+---------------------------------------------------------------------------------------------
+    -> All stereotype annotation are @Component specialization.
+        *) stereotype is any annotation declares the role in our application.
+    -> These get picked up by the component scanning.
+    The different is @Service @Repository @Controller all are has behaviour and representation patterns
+---------------------------------------------------------
+17. What is the difference between @Bean and @Component?
+---------------------------------------------------------
+    -> @Component is used within our own class which spring auto configure its
+    -> @Bean is used for the third party where we wont own the source code but still need to do the custom contructor logics
+    -> @Bean is only works within the @configuration annotation.
+---------------------------------------------------------
+18. What is Configuration and what problem does it solve?
+---------------------------------------------------------
+    -> @Configuration makes sure the @Bean are in singleton patterns.
+    -> Same bean instance is returned in everytime.
+----------------------------------------------------------------------
+19. What are common reasons for slow Spring Boot application startup?
+----------------------------------------------------------------------
+    -> Common causses are 
+        -> Excessive auto configurations
+        -> Large classpath scanning
+        -> Slow database initialization
+        -> Using unnecessary depecdency
+        -> Heavy logging
+----------------------------------------------------------------------
+20. What causes circular dependency errors and how do you fix them?
+----------------------------------------------------------------------
+    -> Two classes has dependend over each other is circular dependcy
+    -> TO fix
+        -> Is theextract the shared logic to one third service.
+        -> By using interface
+        -> Using @Lazy
+----------------------------------------------------------------------
+21. Why does Transactional sometimes not work in Spring Boot?
+----------------------------------------------------------------------
+    -> @Transactional fails when we bypass the spring proxy.
+    -> Common issue
+        ->Self invocation (Calling a @Transactional method from within the same class bypasses the proxy entirely because this refers to the real object, not the proxy)
+        -> Private method 
+        -> WHen class is not managed by the Spring
+        ->Transaction relies on proxy interception which require public methods and external calls
+------------------------------------------------------------------------------------
+22. What is the difference between application.properties and bootstrap.properties?
+------------------------------------------------------------------------------------
+    ->bootstrap.properties is loaded before the application.properties its is mainly used in the Spring cloud application
+    -> In most Spring Boot applications, application.properties or application.yml is sufficient.
+------------------------------------------------------------------------------------
+23. Why does LazyInitializationException occur in Spring Boot?
+------------------------------------------------------------------------------------
+    -> This occurs when lazy loaded JPA accessed outside an ACtive Hibernate or transaction.
+    -> Mostly this will occurs when entites directly return from the controllers instead of DTO's
+------------------------------------------------------------------------------------
+24. What is the role of ConfigurationProperties in Spring Boot?
+------------------------------------------------------------------------------------
+    -> It binds external configuration to the strongly typed java objects.
+    -> It provides type safety, better structure, and supports validation
+------------------------------------------------------------------------------------
+25. Why is spring.jpa.hibernate.ddl-auto=update not recommended in production?
+------------------------------------------------------------------------------------
+    -> Using ddl-auto=update can cause unintended schema changes and data loss in production
+    -> Schema changes should be handled using controlled migration tools such as Flyway or Liquibase    

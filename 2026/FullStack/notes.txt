@@ -8,6 +8,7 @@ Parts need to cover
         -> Learn the basics of feature of java 8 and implement that using top 10 basic problems
     -> 4 Spring Boot top 10 questions and answers -Spring Boot top 10 questions and answers
     -> Real scenario based questions and answers
+    -> Linkedin Interview questions.
     -> SQL interview based 10 questions.
     -> Top 10 interview queries based Questions.
     -> AWS top 10 basic interview questions mainly on ec2 instance only
