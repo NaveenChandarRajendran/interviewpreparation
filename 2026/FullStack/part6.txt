@@ -1,0 +1,172 @@
+----------------------------------------------------------------------
+1. How does Spring Boot determine which auto-configurations to apply
+----------------------------------------------------------------------
+    ->  Spring uses a condition based auto configuration mechanism
+    -> When application starts, the @EnableAutoCOnfiguration is triggered by @SpringBootApplication
+    -> That activates the AutoConfigurationImportSelector.
+    -> THen spring.factories or AutoConfiguration.Imports list all candiate class
+    -> Each candidate class is anootated by @Conditional.
+    -> Spring evaluats these condition befiore any registry beans.
+
+----------------------------------------------------------------------
+2.  What happens internally when you include spring-boot-starter-web
+----------------------------------------------------------------------
+    -> WHen we include the spring-boot-starter-web in POM file.
+    -> This will pulls more dependency like spring-webmvc, spring-boot-starter-tomcat etc on the classpath.
+    -> The Spring Boot auto configuration detects all class in classpath like DispatcherServlet, Tomcat, and ObjectMapper
+    and activates auto configuration conditionally.
+    -> Like will application most needed part class are activated.
+
+----------------------------------------------------------------------
+3.  Why does Spring Boot emphasize Convention over Configuration?
+----------------------------------------------------------------------
+    -> Before boot , Every Spring project requires an more line of XML to setup and run the project itself.
+    -> Developers spent days on plumbing before writing a single line of business logic, and every project
+    -> So Core idea here is Boot Encodes the best practise defaults of 90% of use cases like -  port 8080, HikariCP connection pool,Tomcat server etc.
+    -> Which are mostly common to all projects.
+
+----------------------------------------------------------------------
+4.  How does Spring Boot internally load application.properties?
+----------------------------------------------------------------------
+    -> WHen the app starts, Before any bean created The SB will look for application.properties.
+    -> It will look on two bases classpath and classpath/config folder.
+    -> It will read the file and load all key value pairs in Environment Object.
+
+----------------------------------------------------------------------
+5.  What is the exact startup lifecycle of a Spring Boot application?
+----------------------------------------------------------------------
+    -> It has roughtly four stages
+        -> 1st SpringApplication.run() it detects application type - servlet and set up the environment.
+        -> 2nd ApplicationContext is created based on the application type.
+        -> 3rd context.refresh() it evaluates all auto config, then intanitate beans and starts the Tomcat server
+        -> 4th Application Runner and CommandLineRunner beans are exceuted in order in last ApplicationReadyEvent will call means app is fully ready to serve.
+
+------------------------------------------------------------------------------
+6.  What is the difference between @ComponentScan and @SpringBootApplication?
+------------------------------------------------------------------------------
+    -> @COmponentScan is the plain Spring annotation not SB
+    -> It's job is to scan the class annoated with @Component, @Service, @Repository, or @Controller and register as a bean.
+    -> Where SpringBootApplication is boot annotation where it hanlde 3 things
+        -> @SpringBootConfiguration,@EnableAutoConfiguration and @ComponentScan so it also does the component scanning.
+    -> So @ComponentScan is just one part of the @SpringBootApplication.
+
+------------------------------------------------------------------------------
+7.  How does Spring Boot automatically detect embedded Tomcat?
+------------------------------------------------------------------------------
+    -> SB purley detect the enbedded Tomcat via classpath detections.
+    -> When we add spring-boot-starter-web it pull's the Tomcat JAR.
+    -> SB looks for Tomcat.class and Servlet.class on the classpath and that is the trigeer.
+
+------------------------------------------------------------------------------
+8.  What happens if multiple beans of the same type exist without @Qualifier?
+------------------------------------------------------------------------------
+    -> If multiple beans of same type occurs like 
+    Ex:
+    @Component
+    public class EmailNotificationService implements NotificationService { }
+
+    @Component
+    public class SMSNotificationService implements NotificationService { }
+    Now if you inject by type:
+        @Autowired
+        private NotificationService notificationService; // ← which one?
+    ->Spring will throw the NoUniqueBeanDefinitionException 
+    ->First it will any one is marked as @Primary - if yes that takes
+    -> Or it will check variable name mathches the bean names - if yes that will taken.
+    -> If both fails error will thrown.
+
+------------------------------------------------------------------------------
+9.  How does Spring Boot load profile-specific configurations?
+------------------------------------------------------------------------------
+    -> SB alsways load application.properties as base.
+    -> When profile is active additonal load that profile 
+    Ex:
+        *) application.properties (always loaded):
+            server.port=8080
+            app.name=MyApp
+        *) application-dev.properties (loaded only when dev is active): 
+            server.port=9090
+            spring.datasource.url=jdbc:mysql://localhost/devdb
+        Activate the profile:
+            spring.profiles.active=dev
+
+------------------------------------------------------------------------------
+10.   What role does SpringFactoriesLoader play?
+------------------------------------------------------------------------------
+    -> It is the Spring internal mechanisim which discover and load the classes in spring.factories
+    -> It is the backbone of the SPring auto configuration
+------------------------------------------------------------------------------
+11.   How did Spring Boot eliminate the need for XML configuration?
+------------------------------------------------------------------------------ 
+    SB eliminate the XML by combining three things
+    -> First -> Java based configuration @COnfiguration and @Bean.
+    -> Second -> Annotaion scanning @Component, @Service, @Repository auto-register beans without any XML.
+    -> Third -> SB Automatically set up beans like DataSource, DispatcherServlet, and ObjectMapper.
+------------------------------------------------------------------------------
+12.   What is the internal difference between @RestController and @Controller?
+------------------------------------------------------------------------------
+    -> @RestController is composition of @Controller and @ResponseBody
+    -> @Controller alos reigster the class as MVC but to return as JSON we need to mention @ResponseBody to every methods.
+------------------------------------------------------------------------------
+13.   How does Spring Boot manage dependency versions automatically?
+------------------------------------------------------------------------------
+    -> SB manages versions through the parent POM called spring-boot-starter-parent.
+    -> Which inherits from the spring-boot-dependencies.
+    -> This spring-boot-dependencies has set of test hundred set of common depecdency.
+    -> SO without mentioning version in POM the Maven automatically pick the version for you.
+------------------------------------------------------------------------------
+14.   What is the complete lifecycle of a Spring Bean?
+------------------------------------------------------------------------------
+    -> Bean definition By @Component
+    -> Bean constructor
+    -> dependency injected (Autowired)
+    -> postProcessBeforeInitialization
+    -> @PostConstruct
+    -> Intialization Bean After proeprties set
+    -> postProcessAfterInitialization
+    -> @PreDestroy
+    -> @Bean(destroyMethod="...") 
+
+Full example 
+@Component
+public class MyBean implements InitializingBean, DisposableBean {
+
+    // 1. Constructor — Bean instantiated
+    public MyBean() {
+        System.out.println("1. Constructor called");
+    }
+
+    // 2. Dependencies injected
+    @Autowired
+    private MyService myService;
+
+    // 3. @PostConstruct — runs after injection
+    @PostConstruct
+    public void postConstruct() {
+        System.out.println("2. @PostConstruct called");
+    }
+
+    // 4. InitializingBean — runs after PostConstruct
+    @Override
+    public void afterPropertiesSet() {
+        System.out.println("3. afterPropertiesSet called");
+    }
+
+    // 5. Bean is ready — used by application
+    
+    // 6. @PreDestroy — runs before destruction
+    @PreDestroy
+    public void preDestroy() {
+        System.out.println("4. @PreDestroy called");
+    }
+
+    // 7. DisposableBean — runs after PreDestroy
+    @Override
+    public void destroy() {
+        System.out.println("5. destroy called");
+    }
+}
+------------------------------------------------------------------------------
+15.   What happens if both application.yml and application.properties are present?
+------------------------------------------------------------------------------
+    -> If both files are present, Spring Boot loads both but application.properties takes higher priority over application.yml.
