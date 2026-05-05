@@ -58,6 +58,8 @@ Four Key components
     Types
         -> Construction injection
         -> Field injections
+        Constructor injection is preferred because it supports immutability via final
+        Enables easy unit testing without Spring context, and fails at startup rather than at runtime.
 ------------------------------------------------------------------------
 9. Where do we define properties in the Spring Boot application?
 ------------------------------------------------------------------------        
