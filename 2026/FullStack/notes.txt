@@ -9,6 +9,7 @@ Parts need to cover
     -> 4 -> Spring Boot top 10 questions and answers -Spring Boot top 10 questions and answers
     -> 5 -> Real scenario based questions and answers
     -> 6 -> Linkedin Interview questions.
+    -> 7 -> Microservices Real project explanation
     -> SQL interview based 10 questions.
     -> Top 10 interview queries based Questions.
     -> AWS top 10 basic interview questions mainly on ec2 instance only

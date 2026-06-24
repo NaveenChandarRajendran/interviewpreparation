@@ -1,0 +1,6 @@
+Java
+    -> How you will securly send the data from front end to backend
+    -> How you will send the token to backend, in backend how you will get it.
+
+AWS
+    -> In except ec2 what are the avaiable option to deploy 
