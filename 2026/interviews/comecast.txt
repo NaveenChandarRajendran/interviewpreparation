@@ -5,6 +5,5 @@ AWS
 
 
 Java
-1What are the common memory leaks will happen?
-2. If your application is under huge load and hangs what you will do how you will check
-3. 
+1 What are the common memory leaks will happen?
+2 If your application is under huge load and hangs what you will do how you will check
