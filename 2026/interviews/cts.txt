@@ -1,0 +1,12 @@
+How dead lock will be controlled in the database level ex if user naveen and Vinoth three
+
+Use case is 
+1  api is coming to do take 1000 rs from naveen and put to Vinoth
+Another api same isndoing vice versa so what will be happen same time
+
+
+What isthe  circuit breaker and where you will use that. And retry also where you will use that
+
+In angular when you will guard and interceptor in outter way or looks same but there is difference.
+
+Have you worked on observable pattern in java

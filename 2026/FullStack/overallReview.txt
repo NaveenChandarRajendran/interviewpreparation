@@ -31,214 +31,178 @@ What are the feature introduced in the java 21
     -> Pattern Matching for switch
     -> Record pattern
     -> Sequenced Collections
+------------------------------------------------
+What is Circuit Breaker
+------------------------------------------------
+    -> Circuit Breaker is a fault tolorence pattern used in microservice to prevent repeeated calls to the failing services.
+    -> If a service is failing for sometime , then the circuit will open as it will be wait for some time.
+    -> After the wait time like 5 to 10 mins then it moves to the half open to test the servicve is up or not.
+There are three states for Circuit Breaker
+    -> Closed State (Everything is healthy other service are giving response)
+    -> Open State (Too many failure so immediaidlty return fallback response)
+    -> Half Open (After some time , Only few request will be sent to check the service is up)
+
+------------------------------------------------
+What is Retry
+------------------------------------------------
+    -> At specific time interval it will try and try untill the serivce is fine.
+    -> This can be used for temporary failures such as networks issues are timeout.
+
+--------------------------------------------------------------------
+What if someone change the token payload and send what will happen?
+--------------------------------------------------------------------
+    -> If someone changes the JWT payload, for example changing the role from USER to ADMIN, the token becomes invalid because the sig  ature no longer matches the modified payload. When Spring Security validates the JWT, signature verification fails, so authentication is rejected before the request reaches the controller. 
+    -> The application typically returns a 401 Unauthorized response because the token has been tampered with
+
+--------------------------------------------------------------------
+In singleton imagine you have there 10000 user trying to create your instance so you singleton might get crash lm so how you will fix that
+--------------------------------------------------------------------
+    -> If two threads execute together.
+    Ex:
+        Thread 1
+if(instance == null) ✅
 
+                     (context switch)
 
-Kafka Basics Notes
-1. Topic
-What is it?
+Thread 2
+if(instance == null) ✅
 
-A Topic is a logical channel where producers publish messages and consumers read them.
+Thread 2 creates object
 
-Think of it as a folder that stores related messages.
+                     (context switch)
 
-Example
-Topic: trade-created
+Thread 1 also creates object
 
-Trade 100 Created
-Trade 101 Created
-Trade 102 Created
+    -> Now we have two instance that breaks the singleton pattern.
+    -> However the singleton wont fail it does not gurantte the single instance concepts.
+    -> To make the singleton to thread safe we must do it synchronized method.
+    Ex:
+    public static synchronized DatabaseConnection getInstance() {
+    if (instance == null) {
+        instance = new DatabaseConnection();
+    }
+    return instance;
+}
+    -> Due to this synchronized approacch it will reduce the performance.
+    -> So by implementing as double check locking will helps in performace like
+    Ex:
+    private static volatile DatabaseConnection instance;
 
-In a Spring Boot application:
+public static DatabaseConnection getInstance() {
+    if (instance == null) {
+        synchronized (DatabaseConnection.class) {
+            if (instance == null) {
+                instance = new DatabaseConnection();
+            }
+        }
+    }
+    return instance;
+}
+why better?
+    -> First thread object is created
+    -> Later thread dont enter the synchronized block itself
+    -> Better performance
 
-kafkaTemplate.send("trade-created", tradeEvent);
+-----------------------------------------------------------------------
+What is the difference between HashMap and ConcurrentHashMap?
+-----------------------------------------------------------------------
+    -> THe HashMap is not thread safe.
+    Ex: if two thread simultaneously tries to change the same hashmap means it may cause issue.
+        The issue can be incorrect data,Lost updates etc,
+    -> So to control this we will use ConcurrentHashMap.
+    ConcurrentHashMap<Integer, String> users = new ConcurrentHashMap<>();
+    -> Many threads can safe read and write
+    -> It locks only the required position
+    This allows
+Thread 1
 
-The message is sent to the trade-created topic.
+Bucket A
 
-2. Partition
-What is it?
+Thread 2
 
-A Partition is a physical division of a Topic.
+Bucket B
 
-Kafka splits a topic into multiple partitions to support parallel processing and high throughput.
+Both work simultaneously ✅    
 
-Example
-Topic : trade-created
+So performance is much better than locking the whole map.
 
-├── Partition 0
-├── Partition 1
-└── Partition 2
+Why not use synchronized HashMap?
 
-Messages might be stored like this:
+You can do
 
-Partition 0
--------------
-Trade100
-Trade103
+Map<Integer,String> map =
+Collections.synchronizedMap(new HashMap<>());
 
-Partition 1
--------------
-Trade101
-Trade104
+But
 
-Partition 2
--------------
-Trade102
-Trade105
-Why partitions?
-Faster processing
-Multiple consumers can work simultaneously
-Better scalability
-Maintains order within a partition
-3. Consumer Group
-What is it?
+Every operation locks the entire map.
 
-A Consumer Group is a group of consumers working together to read messages from a topic.
+Thread 1
 
-Kafka assigns partitions among the consumers so each message is processed only once within that group.
+Entire map locked
 
-Example
-Topic : trade-created
+↓
 
-Partition 0
-Partition 1
-Partition 2
+Thread 2 waits
 
-Notification Service has 3 instances.
+↓
 
-Consumer Group : notification-group
+Thread 3 waits
 
-Instance 1
-Instance 2
-Instance 3
+Performance becomes poor.
 
-Kafka assigns:
+ConcurrentHashMap
 
-Partition 0 → Instance 1
+Thread 1
 
-Partition 1 → Instance 2
+Bucket A
 
-Partition 2 → Instance 3
+↓
 
-Each instance processes different messages.
+Thread 2
 
-4. Offset
-What is it?
+Bucket C
 
-An Offset is the position (or index) of a message inside a partition.
+↓
 
-Every message in a partition gets a unique offset.
+Both continue
 
-Example
-Partition 0
+Better scalability.
 
-Offset 0 → Trade100
+   -> HashMap allows one null key where ConcurrentHashMap doesnt not allow
+   Why doesn't ConcurrentHashMap allow null?
 
-Offset 1 → Trade101
+Excellent interview question.
 
-Offset 2 → Trade102
+Imagine
 
-Kafka uses offsets to know:
+map.get(10);
 
-Which messages have already been consumed.
-Which message should be read next.
+Returns
 
-Important: Offsets are unique only within a partition, not across the whole topic.
+null
 
-Relationship Between Them
-Producer
-    │
-    ▼
-Topic (trade-created)
-    │
-    ├── Partition 0
-    │      Offset 0
-    │      Offset 1
-    │
-    ├── Partition 1
-    │      Offset 0
-    │      Offset 1
-    │
-    └── Partition 2
-           Offset 0
-           Offset 1
+Question
 
-Consumer Group
+Did
 
-notification-group
+key not exist?
 
-Instance 1 ← Partition 0
+OR
 
-Instance 2 ← Partition 1
+key exists but value is null?
 
-Instance 3 ← Partition 2
-Real Flow
-Trade Service
+Impossible to know.
 
-      │
+In concurrent programs this ambiguity is dangerous.
 
-Publish Event
+So Java simply disallows null keys and values.
 
-      │
+---------------------------------------------------------------------------------------------
+Why do we use Thread Pool (ExecutorService)? Why not create a new Thread for every request?
+---------------------------------------------------------------------------------------------
 
-Topic : trade-created
-
-      │
-
-Kafka decides Partition
-
-      │
-
-Message stored with Offset
-
-      │
-
-Consumer Group
-
-      │
-
-Kafka assigns Partition
-
-      │
-
-Notification Service processes message
-Interview One-Liners
-Topic
-
-A Topic is a logical channel where producers publish messages and consumers read them.
-
-Partition
-
-A Partition is a physical division of a Topic that enables parallel processing, scalability, and ordered message storage within that partition.
-
-Consumer Group
-
-A Consumer Group is a set of consumers working together. Kafka distributes partitions among them so each message is processed only once per group.
-
-Offset
-
-An Offset is the unique position of a message within a partition. Kafka uses it to track which messages have been consumed.
-
-Easy Memory Trick
-Kafka Term	Think of it as
-Topic	A folder containing related messages
-Partition	Drawers inside the folder
-Offset	The serial number of a file inside a drawer
-Consumer Group	A team of employees sharing the work
-Consumer	One employee in that team
-Final Interview Summary
-Producer
-    │
-    ▼
-Topic
-    │
-    ▼
-Partitions
-    │
-    ▼
-Messages stored with Offsets
-    │
-    ▼
-Consumer Group
-    │
-    ▼
-Consumers process assigned Partitions 
+    -> if imagine we are getting 10000 request if we try to create 10000 threads like this means
+    new Thread(() -> processRequest()).start();
+    It is very more expensive operation because it needs CPU,memory issue etc.
+    -> 
