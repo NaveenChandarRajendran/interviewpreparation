@@ -137,7 +137,7 @@ Input:  [1, 2, 3, 2, 4, 3, 5]
 Output: [2, 3]
 
 Answers
-    List<Integer> nums = List.of(1, 2, 3, 2, 4, 3, 5);
+    List<Integer> nums = List.of(1, 2, 3, 2, 4, 3, 5); 
         List<Integer> dupNums = nums.stream()
                 .filter(n -> Collections.frequency(nums, n) > 1)
                 .distinct()

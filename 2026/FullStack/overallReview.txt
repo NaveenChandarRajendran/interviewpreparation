@@ -19,7 +19,7 @@ Seal Class
 Record
 ------------------------------------------ 
     ->  Instead of creating manually constructor,getter etc.
-    -> We can just declare the fields with record. It automatically generates  the getters constructor evrythong.
+    -> We can just declare the fields with record. It automatically generates  the getters constructor evrything.
 
     Ex:
     public record Point(int x, int y) {}
