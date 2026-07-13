@@ -1,3 +1,6 @@
+----------------------
+1st time attended
+---------------------
 Seal class 
 Record
 Map and collection what is there interface
@@ -5,4 +8,8 @@ Virtual thread
 302 status
 
 
-Spring 
+-----------------------
+2nd time attended
+-----------------------
+1 . Method you will have 2 int array need to merge that two array and sort it using normal java code no java 8
+2. Find duplicate numbers in a List. and reutrn with index and value the order must be follow and we need to use java 8 only

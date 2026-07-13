@@ -1,0 +1,12 @@
+Spring
+1. How you confugred the kafka in your project?
+2. WHat are the argument you will send for kafka notifivation like kafkatemplate.send("templatename", ??);
+3. What are the spring serity class you have been worked?
+4. How did you configure swagger in your project?
+5. What is your spring boot version?
+
+React
+1. How you will notify the child change to parent
+2. WHat react version you wroked?
+3. Other than redux,usecontext how you will share the data for the components?
+4. WHat library you used for wrting unit test in react?

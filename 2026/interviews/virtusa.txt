@@ -1,0 +1,28 @@
+1.Write stream by filtering the salary and return the second highest paid employee from the list of employees.
+Employee
+    name
+    department
+    salary
+
+Employee SecondSalaryEmp = employee.stream()
+    .sort(Employee::getSalary);
+    System.out.println(SecondSalaryEmp[1].getName(), SecondSalaryEmp[1].getDepartment(), SecondSalaryEmp[1].getSalary());
+
+2. Write a singleton function in java.
+class SingleTon(){
+
+    private SingleTon(){}
+
+    class SingleInstance(){
+        private instance = new SingleTon();
+
+        getInstance(){
+            return this.instance;
+        }
+    }
+}
+3. What are the scope in spring boot app that will be common to other spring boot app?
+4. what is indexing and how you will index in database?
+ 
+
+
