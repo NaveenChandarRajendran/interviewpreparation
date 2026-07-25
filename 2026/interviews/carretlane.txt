@@ -1,0 +1,4 @@
+1. how the authozisation will hanlde between the microservies
+2. what is dlq
+3. tell me the workflow from frontend to backend aws sdk for downloading file in s3
+4. presignedurl
