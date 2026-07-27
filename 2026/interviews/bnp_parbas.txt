@@ -1,0 +1,14 @@
+Put vs patch
+Tobetrue vs tobetruthy
+Combised way to create thread
+What is ??
+Imagine you have 3 method you want only to rollback to specific method
+What is Domsantizer
+Practise lot of code in java and find bugs
+How to create an new empty arraylist and for that what datatype you will provide
+Canactive route guards
+Post latest angular 16 new features
+Micro front end
+Virtual dom and shallow dom
+Controler vs Restcontriller
+Let say we have forms where has firstname lastanem etc below we have description as textarea in that if malusac person put some script tries to attack how angular will handle this scenario? 
