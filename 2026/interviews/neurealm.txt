@@ -1,0 +1,9 @@
+Java
+-> How you will hanlde the expection in spring boot
+-> How you make your class as immutable
+-> inteviewer asked something about impotiable i didnt get it correctly
+->  you have 4 services at last service you had problem you need to rollback it so how you will rollback on previous services
+-> how you will create an 100 threads in spring boot
+
+React
+-> How rerender is happening in react

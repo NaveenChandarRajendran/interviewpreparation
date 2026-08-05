@@ -1,0 +1,9 @@
+Problem
+ATM logic
+//        List.of(500, 500, 50, 20, 20, 20, 10)
+//        560
+
+ATM machine functionality where 560 is the amount i want. i am going to withraw it with the list of amount it has if the amount present i want true or false in a recursive mehtod
+
+2. what is n + 1 in database sides
+3. Learn about one to one, one to many relationships
