@@ -409,6 +409,47 @@ System.out.println(result);
 
 ---
 
+---
+
+# 18. Find Top K Most Frequently Purchased Products.
+
+### Question
+
+```java
+  List<String> gadgets = List.of(
+                "Phone",
+                "Laptop",
+                "Phone",
+                "Laptop",
+                "Laptop",
+                "TV",
+                "Phone"
+        );
+
+        int k = 2;
+```
+
+Return gadgets.
+
+### Answer
+
+```java
+List<Map.Entry<String, Long>> result =
+                gadgets.stream()
+                        .collect(Collectors.groupingBy(
+                                Function.identity(),
+                                Collectors.counting()))
+                        .entrySet()
+                        .stream()
+                        .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                        .limit(k)
+                        .toList();
+
+        System.out.println(result);
+```
+
+---
+
 # Methods Covered
 
 ## Stream Operations
