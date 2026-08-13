@@ -1,0 +1,7 @@
+What are new feature in java 21
+what is virtual thread
+what are the stypes in streams
+why we are using the streams
+Craete and USer object and remove the duplicate username oject using streams
+What is the advanctage of spring boot
+if i have class how to make that class that as not auto inject

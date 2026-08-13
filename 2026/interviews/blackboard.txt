@@ -17,3 +17,16 @@ c=[21,22,23,24,25,26,27,28,29,30,31]
 
 // Expected Output:
 // A=[1st,2nd,3rd,4th,5th,7th,8th,9th,10th,11th,12th,13th,14,th,15th,16th,17th,18th,19th,20th,21st,22nd,23rd,24th,25th,26th,27th,28th,29th,30th,31st]
+
+
+2nd time
+
+1) Imagine you have dashboard has 2 charts and 2 table with user prifile pic is showing how you will render this so that it wont affect the UI
+2) Without user name and password how you will generate the jwt token
+3) arr [1,2,3,4,5];
+
+for(let i=0; i < arr.length; i++){
+    settimeout(()=>{
+    console.log(i);
+    },1000)
+}

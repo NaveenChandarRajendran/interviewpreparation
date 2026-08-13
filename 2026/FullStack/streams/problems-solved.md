@@ -448,6 +448,30 @@ List<Map.Entry<String, Long>> result =
         System.out.println(result);
 ```
 
+# 19. Remove the duplicate object with the name
+
+### Question
+
+```java
+        List<User> users = Arrays.asList(new User("Naveen"),new User("Rangaraj"),new User("Naveen"));
+```
+
+Return gadgets.
+
+### Answer
+
+```java
+List<User> tempUser = users.stream()
+                    .collect(Collectors.toMap(
+                            User::getName,
+                            user -> user,
+                            (user1,user2) -> user1
+                    ))
+                    .values()
+                    .stream()
+                    .toList();
+```
+
 ---
 
 # Methods Covered
