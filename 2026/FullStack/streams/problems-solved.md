@@ -472,6 +472,24 @@ List<User> tempUser = users.stream()
                     .toList();
 ```
 
+# 20. If salary is same, sort by name alphabetically
+
+### Question
+
+```text
+        Input:  [("Alice",70000), ("Bob",50000), ("Charlie",70000), ("Dave",50000)]
+```
+
+### Answer
+
+```java
+List<Employee> result = employees.stream()
+        .sorted(Comparator
+                .comparing(Employee::getSalary)
+                .thenComparing(Employee::getName))
+        .toList();
+```
+
 ---
 
 # Methods Covered
